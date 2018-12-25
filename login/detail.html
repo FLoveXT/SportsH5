@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>资金明细</title>
+    <meta name="keywords" content="">
+    <link href="../css/iconfont.css" rel="stylesheet">
+    <link href="../js/minirefresh/minirefresh.min.css" rel="stylesheet">
+    <link href="../css/login.css" rel="stylesheet">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    
+    <script src="../js/minirefresh/minirefresh.min.js"></script>
+    <script src="../js/common.js"></script>
+    <style>
+            body {
+                background: #f5f5f5;
+            }
+      
+            .moneyDetail .list{padding:8px;background: #fff;min-height: 1px;font-size: 12px;border-bottom: #efefef solid 4px;border-top: #efefef solid 4px;}
+            .moneyDetail .list h1{font-weight: normal}
+            .moneyDetail .list h1 .date{font-weight: normal;font-size: 10px;}
+            .moneyInfo li{float: left;width: 33.3333%; text-align: center;font-size: 12px;color: #acacac; line-height: 24px;}
+            .moneyInfo li p{color: #acacac;font-size: 16px;}
+            .remark{color: #acacac;font-size: 12px;}
+            .remark p{font-size: 12px;}
+            .remark h1{font-weight: normal;color: #333;font-weight: normal}
+          
+        </style>
+    <script>
+    var ROWS = 10;
+    $(function () {
+
+        // 初始化页码
+        var page = 0;
+
+        // miniRefresh 对象
+        var miniRefresh = new MiniRefresh({
+            container: '#minirefresh',
+            down: {
+            	isLock: false,//是否禁用下拉刷新
+            	offset: 5,
+            	callback: function () {
+                    doAjax('down');
+                }
+            },
+            up: {
+                isAuto: true,
+                callback: function () {
+                    doAjax('up');
+                }
+            }
+        });
+
+        // 组装 ajax 分页函数。参数 downOrUp 判断是下拉刷新还是上拉加载。
+        // 特别提示：若你仅使用下拉刷新或上拉加载的其中一项，可不用组装 ajax 分页函数了，直接将 ajax 分页放在下拉刷新或上拉加载的回调 callback 里。
+        var doAjax = function (downOrUp) {
+            if (downOrUp == 'down') {
+                page = 1;// 下拉刷新页码设置
+            } else {
+                page++;// 上拉加载递增页码
+            }
+
+            $.ajax({
+            	url: BaseUrl + "capitalDetail/list?timestamp=" +  (new Date()).getTime(),// 请求网址
+	            type: "GET",
+	            data: {// 请求参数，一般会带上页码
+					offset: page,
+					limit: ROWS,
+	                't': new Date().getTime()// 防止GET请求缓存
+	            },
+	            dataType : "json",
+                success: function (result) {
+                    // 下面这段请根据自己的数据结构来处理
+					if (result.code == SUCCESS_CODE) {
+						var data =  result.result;
+						var totalSize = data.totalCount;
+						if (data.result && data.result.length > 0) {
+							var html = "";
+							$.each(data.result, function(i, capitalDetail){
+								html += '<div class="list">';
+								html += '<h1>' + CAPITALDETAI_TYPE[capitalDetail.type] + '<span class="date pull-right">' + (capitalDetail.createTime?capitalDetail.createTime.replace(/-/g, "/"):"") + '</span></h1>';
+								html += '<ul class="moneyInfo clear_it">';
+								html += '<li>变动前帐户金额<p>' + formatterDouble(capitalDetail.balanceBefor) + '</p></li>';
+								html += '<li>变动金额<p>' + formatterDouble(capitalDetail.money) + '</p></li>';
+								html += '<li>变动后帐户金额<p>' +  formatterDouble(capitalDetail.balanceAfter) + '</p></li>';
+								html += '</ul>';
+								html += '<div class="remark">';
+								html += '<h1>备注</h1>';
+								html += '<p>' + (capitalDetail.remark?capitalDetail.remark:"") + '</p>';
+								html += '</div>';
+								html += '</div>';
+							})
+							
+							if (downOrUp == 'down') {
+								$('#listdata').html('');
+                                $('#listdata').append(html);// DOM 插入数据
+                                miniRefresh.endDownLoading(true);// 结束下拉刷新
+                            } else {
+                            	$('#listdata').append(html);
+                                if ((totalSize/ROWS) <= page) {// 是否已取完数据页
+                                    miniRefresh.endUpLoading(true);// 结束上拉加载
+                                } else {
+                                    miniRefresh.endUpLoading(false);
+                                    miniRefresh.endDownLoading(false);// 结束下拉刷新
+                                }
+                            }
+	                    } else {
+	                        if (downOrUp == 'down') {
+	                            $('#listdata').html('');
+	                            miniRefresh.endDownLoading(true);
+	                        } else {
+	                            miniRefresh.endUpLoading(true);
+	                        }
+	                    }
+					} else if(result.code == UNLOGIN){
+						unLogin();
+					} else {
+						alert(result.msg)
+					}
+                },
+                error: function () {
+                    if (downOrUp == 'down') {
+                        $('#listdata').html('');
+                        miniRefresh.endDownLoading(true);
+                    } else {
+                        miniRefresh.endUpLoading(true);
+                    }
+                }
+            });
+        };
+
+    });
+
+    </script>
+
+    
+
+
+</head>
+
+<body>
+    <div class="title">
+        <a href="javascript:history.go(-1)" class="pull-left">
+            <i class="iconfont icon-left_arrow back_icon"></i>
+        </a>资金明细</div>
+
+    <div style="height:42px;"></div>
+    <!-- 资金明细  -->
+    <div class="moneyDetail">
+		
+		<div id="minirefresh" class="minirefresh-wrap">
+		    <div class="minirefresh-scroll" style="margin-top: 40px;"> 
+		    	<div id="listdata"></div>
+		    </div>
+		</div>
+    </div>
+
+</body>
+
+</html>

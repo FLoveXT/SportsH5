@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>修改密码</title>
+    <meta name="keywords" content="">
+    <link href="../css/iconfont.css" rel="stylesheet">
+    <link href="../css/login.css" rel="stylesheet">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../js/common.js"></script>
+
+    <script>
+        $(document).ready(function (e) {
+        	getUserInfo();
+        	
+            $(".userinfo_menu li").click(function () {
+                var index = $(".userinfo_menu li").index(this);
+                $(".userinfo_menu li").removeClass("on");
+                $(this).addClass("on");
+                $(".content").hide();
+                $(".content").eq(index).show();
+            })
+            
+            //密码修改
+            $("#updatePwd").click(function(){
+            	var id = $("#userId").val();
+            	var oldPwd = $("#oldPwd").val();
+            	if(!oldPwd){
+              		alert('请输入原登录密码');
+        			return false;
+              	}
+            	var pwd = $("#pwd").val();
+            	if(!oldPwd){
+              		alert('请输入新登录密码');
+        			return false;
+              	}
+            	var truePwd = $("#truePwd").val();
+            	if(!truePwd){
+              		alert('请输入确认密码');
+        			return false;
+              	}
+            	
+            	if(pwd != truePwd){
+            		alert("输入的两次密码不一致");
+            		return false;
+            	}
+            	
+            	var reqData = {
+						id: id,
+						oldPwd : oldPwd,
+						pwd : pwd,
+						truePwd : truePwd,
+				};
+				$.ajax({
+					type : "POST",
+					url : BaseUrl + "user/updateLoginPwd",
+					data : reqData,
+					dataType : "json",
+					success : function(result) {
+						if (result.code == SUCCESS_CODE) {
+							alert(result.msg);
+							$("#oldPwd").val("");
+							$("#pwd").val("");
+							$("#truePwd").val("");
+						} else if(result.code == UNLOGIN){
+							unLogin();
+						} else {
+							alert(result.msg);
+						}
+					}
+				});
+            });
+            
+            //取款密码修改
+            $("#updateBankPwd").click(function(){
+            	var id = $("#userId").val();
+            	var bankOldPwd = $("#bankOldPwd").val();
+            	if(!bankOldPwd){
+              		alert('请输入原登录密码');
+        			return false;
+              	}
+            	var bankPwd = $("#bankPwd").val();
+            	if(!oldPwd){
+              		alert('请输入新登录密码');
+        			return false;
+              	}
+            	var trueBankPwd = $("#trueBankPwd").val();
+            	if(!trueBankPwd){
+              		alert('请输入确认密码');
+        			return false;
+              	}
+            	
+            	if(bankPwd != trueBankPwd){
+            		alert("输入的两次密码不一致");
+            		return false;
+            	}
+            	
+            	var reqData = {
+            			id: id,
+						oldPwd : bankOldPwd,
+						bankPwd : bankPwd,
+						trueBankPwd : trueBankPwd,
+				};
+				$.ajax({
+					type : "POST",
+					url : BaseUrl + "user/updateBankPwd",
+					data : reqData,
+					dataType : "json",
+					success : function(result) {
+						if (result.code == SUCCESS_CODE) {
+							$("#bankOldPwd").val("");
+							$("#bankPwd").val("");
+							$("#trueBankPwd").val("");
+						} else if(result.code == UNLOGIN){
+							unLogin();
+						} else {
+							alert(result.msg);
+						}
+					}
+				});
+            });
+            
+        });
+
+        
+        function getUserInfo(){
+        	$.ajax({
+    			type : "GET",
+    			url : BaseUrl + "user/getUserInfo?timestamp=" +  (new Date()).getTime(),
+    			dataType : "json",
+    			success : function(result) {
+    				if (result.code == SUCCESS_CODE) {
+    					var user = result.result.user;
+    					$("#userId").val(user.id);
+    					if(user.registerType == 1){
+    						$("#updatePwdMenu").hide();
+    						$("#mainContent").css("margin-top", "50px");
+    					}
+    				} else if(result.code == UNLOGIN){
+    					unLogin();
+    				} else {
+    					alert(result.msg);
+    				}
+    			}
+    		});
+        }
+    </script>
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        table tr td {
+            padding: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+	<input id="userId" type="hidden">
+    <div class="title">
+        <a href="userInfo.html" class="pull-left">
+            <i class="iconfont icon-left_arrow back_icon"></i>
+        </a>修改密码</div>
+    <div class="head" style="height: 70px;" id="updatePwdMenu">
+            <ul class="userinfo_menu">
+              <li class="on">修改登录密码</li>
+              <li >修改取款密码</li>
+            </ul>
+            <div class="bar1" id="bar1"></div>
+    </div>   
+    <div id="mainContent" class="login" style="margin-top: 100px;">
+        <!--修改登录密码-->
+        <div class="content" style="display:block;">
+            <div class="wrap mt14">
+                <input id="oldPwd" name="" type="password" placeholder="输入原登录密码" />
+
+            </div>
+            <div class="wrap mt14">
+                <input id="pwd" name="" type="password" placeholder="输入新登录密码" />
+            </div>
+            <div class="wrap mt14">
+                    <input id="truePwd" name="" type="password" placeholder="确认新密码" />
+            </div>
+            <div class="mt14">
+                <a href="javascript:;" class="btn" id="updatePwd">确认修改</a>
+            </div>
+        </div>
+
+
+         <!--修改取款密码-->
+         <div class="content" style="display:none;">
+                <div class="wrap mt14">
+                    <input id="bankOldPwd" name="" type="password" placeholder="输入原取款密码" />
+    
+                </div>
+                <div class="wrap mt14">
+                    <input id="bankPwd" name="" type="password" placeholder="输入新取款密码" />
+                </div>
+                <div class="wrap mt14">
+                        <input id="trueBankPwd" name="" type="password" placeholder="确认新密码" />
+                </div>
+                <div class="mt14">
+                    <a href="javascript:;" class="btn" id="updateBankPwd">确认修改</a>
+                </div>
+            </div>
+
+
+    </div>
+
+</body>
+
+</html>

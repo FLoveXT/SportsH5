@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+  <meta name="format-detection" content="telephone=no" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>注册</title>
+  <meta name="keywords" content="">
+  <link href="../css/iconfont.css" rel="stylesheet">
+  <link href="../css/login.css" rel="stylesheet">
+  <script src="../js/jquery-1.8.3.min.js"></script>
+  <script src="../js/common.js"></script>
+
+<script>
+    $(document).ready(function (e) {
+
+      $("#tijiao_btn").click(function () {
+      	 var account = $("#account").val();
+      	 if(account.length < 4 || account.length >12){  
+			 alert('帐号只能输入4-12个字符'); 
+     		 return fale;  
+		  }  
+		  if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(account)){
+			 alert('帐号不能有特殊字符');
+			 return false
+		  }
+		  if(/(^\_)|(\__)|(\_+$)/.test(account)){
+			  alert('帐号首尾不能出现下划线\'_\'');
+			  return false;
+		  }
+		  
+      	 var phone = $("#phone").val();
+      	 if(!phone){
+      		alert('帐号首尾不能出现下划线\'_\'');
+			return false;
+      	 }
+      	 var smsCode = $("#smsCode").val();
+      	if(!smsCode){
+      		alert('请输入验证码');
+			return false;
+      	 }
+      	 var pwd = $("#pwd").val();
+      	 if(!pwd){
+      		alert('请输入登录密码');
+			return false;
+      	 }
+      	 var truePwd = $("#truePwd").val();
+      	 if(!truePwd){
+      		alert('请输入登录确认密码');
+			return false;
+      	 }
+      	 var realName = $("#realName").val();
+      	 if(!realName){
+      		alert('请输入中文名');
+			return false;
+      	 }
+      	 var qq = $("#qq").val();
+      	 if(!qq){
+      		alert('请填写QQ号码');
+			return false;
+      	 }
+      	 var bankPwd = $("#bankPwd").val();
+      	 if(!bankPwd){
+      		alert('请输入取款密码');
+			return false;
+      	 }
+      	 var trueBankPwd = $("#trueBankPwd").val();
+      	if(!trueBankPwd){
+      		alert('请输入取款确认密码');
+			return false;
+      	 }
+      	
+      	var reqData = {
+      			account: account,
+      			phone: phone,
+      			smsCode: smsCode,
+      			pwd: pwd,
+      			truePwd: truePwd,
+      			realName: realName,
+      			qq: qq,
+      			bankPwd: bankPwd,
+      			trueBankPwd: trueBankPwd,
+      	}
+      	 
+      	$.ajax({
+    		type: "POST",
+    		url: BaseUrl + "user/register",
+    		data: reqData,
+    		dataType: "json",
+    		cach: false,
+    		success: function(result){
+    			if(result.code == "00"){
+    				alert(result.msg);
+    				window.location.href = "login.html";
+    			} else {
+    				alert(result.msg);
+    			}
+    		}
+    	}); 
+      	 
+      })
+
+      $("#checkbox").toggle(function(){
+
+        
+          $(this).addClass("checkbox");
+      },function(){
+        $(this).removeClass("checkbox");
+       
+      })
+
+
+      //发送验证码
+       $("#send_btn").click(function () {
+    	   var phone = $.trim($("#phone").val());
+	       if(!phone){
+	       		alert("请输入手机号码");
+	       		return false;
+	       	}
+	       	if(!/^1[3|4|5|7|8]\d{9}$/.test(phone)){
+	       		alert("手机号码不合法");
+	       		return false;
+	       	}
+	       var obj = $(this);
+	       time(obj);
+	       
+	       $.ajax({
+				  type: "GET",
+				  url: BaseUrl + "user/sendMsgCode/" + phone,
+				  dataType: "json",
+				  cach: false,
+				  success: function(result){
+					  if(result.code == SUCCESS_CODE){
+					  } else {
+						 alert(result.msg);
+					  }
+				  }
+	       });
+      })
+
+
+    });
+
+
+
+    var wait = 60;
+    function time(btnObj) {
+        if (wait == 0) {
+            btnObj.removeClass("yzCode2");
+            btnObj.attr("disabled", false);
+            btnObj.val("获取验证码");
+            wait = 60;
+            return false;
+        } else {
+            btnObj.addClass("yzCode2");
+            btnObj.attr("disabled", true);
+            btnObj.val("重新发送(" + wait + ")");
+            wait--;
+            setTimeout(function () {
+                time(btnObj)
+            }, 1000)
+        }
+    }
+
+
+  </script>
+
+<style>
+    body {
+      background: #f5f5f5;
+    }
+
+    .space {
+      height: 1px;
+      margin: 0px 20px 0 20px;
+      border-bottom: #efefef solid 1px;
+    }
+
+    .tiaoyue{
+      font-size: 10px;
+      -webkit-transform-origin: 0% 0%;
+      -webkit-transform: scale(0.9);
+    }
+
+    .text{padding-left:4px;width:68px;text-align: right}
+
+    .input{width: 100%;}
+
+    .tint{
+      font-size: 12px;
+      -webkit-transform-origin: 0% 0%;
+      -webkit-transform: scale(0.9);
+    }
+    
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="title">
+    <a href="javascript:history.go(-1)">
+      <i class="iconfont icon-left_arrow back_icon"></i>
+    </a>注册</div>
+
+  <div style="height:30px;"></div>
+  <div class="login">
+    <div class="wrap">
+      <table width="100%">
+        <tr><td class="text">帐号</td><td><input id="account" name="" class="input" type="text" placeholder="请输入帐号" /></td></tr>
+      </table>
+    </div>
+    <div class="wrap">
+        <table  width="100%">
+          <tr><td class="text">手机号码 </td><td><input id="phone" name="" class="input" type="text" placeholder="请输入手机号" /></td></tr>
+        </table>
+    </div>
+    <!-- <div class="wrap">
+        <table  width="100%">
+          <tr><td class="text">验证码</td>
+          <td><input id="smsCode" name="" class="input" type="text" style="width:80%" placeholder="请输入验证码" /></td>
+          <td align="right" style="padding-right:6px;">
+            <input name="" type="button" class="yzCode" style="margin:0;" id="send_btn" placeholder="发送验证码" value="获取验证码">
+          </td>
+        </tr>
+        </table>
+    </div> -->
+    <div class="wrap">
+        <table  width="100%">
+          <tr><td class="text">登录密码 </td><td><input id="pwd" name="" class="input" type="text" placeholder="请输入登录密码" /></td></tr>
+        </table>
+    </div>
+
+    <div class="wrap">
+        <table  width="100%">
+          <tr><td class="text">确认密码 </td><td><input id="truePwd" name="" class="input" type="text" placeholder="请确认登录密码" /></td></tr>
+        </table>
+    </div>
+
+    <div class="wrap">
+        <table  width="100%">
+          <tr><td class="text">真实姓名 </td><td><input id="realName" name="" class="input" type="text" placeholder="请输入中文名" /></td></tr>
+        </table>
+    </div>
+    <p class="tint" style="padding-bottom:10px;">必须与您的银行帐号名称相同，否则会影响出款</p>
+    <div class="wrap">
+        <table  width="100%">
+          <tr><td class="text">QQ号 </td><td><input id="qq" name="" class="input" type="text" placeholder="请填写QQ号码" /></td></tr>
+        </table>
+    </div>
+
+    <div class="wrap">
+        <table  width="100%">
+          <tr><td class="text">取款密码 </td><td><input id="bankPwd" name="" class="input" type="text" placeholder="请输入取款密码" /></td></tr>
+        </table>
+    </div>
+
+    <div class="wrap">
+        <table  width="100%">
+          <tr><td class="text">确认密码 </td><td><input id="truePwd" name="" class="input" type="text" placeholder="请再次输入取款密码" /></td></tr>
+        </table>
+    </div>
+    <p class="tint" style="padding-bottom:10px;">请输入6位数字密码，将是您的提款密码，请务必牢记</p>
+
+    <div class="mt14">
+        <div class="tiaoyue" style="position:relative;width:320px;">
+          <label id="checkbox" class="checkbox checkbox_on">
+          我已届满合法博彩年龄，且同意各项
+          <a href="javascript:;" class="" style="text-decoration:underline;font-size:14px;">开户条约</a>
+        </label>
+        </div>
+    </div>
+    <div class="mt14">
+      <a href="javascript:;;" class="btn" id="tijiao_btn">提交</a>
+    </div>
+    
+  </div>
+
+  <div style="height:30px;"></div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>投注页面</title>
+	<link href="css/iconfont.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/detail.css" rel="stylesheet">
+    <link href="layui/css/layui.mobile.css" rel="stylesheet">
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="layui/layui.all.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/initrem.js"></script>
+    <style>
+    	html { 
+    		margin:0 auto; 
+    		padding:0 auto; 
+    		font-size:100px;
+    	}
+    	.xiadangLayer h1 {
+		    background: #323031;
+		    height: 40px;
+		    line-height: 36px;
+		    padding: 0 10px;
+		}
+        #refresh {
+            background: url('images/refresh_button.jpg') no-repeat 0.05rem 0.05rem;
+            background-size: 0.57rem 0.59rem;
+            width: 0.57rem;
+            height: 0.59rem;
+            border: none;
+            position: absolute;
+            top: 1.07rem;
+            right: 0.3rem;
+            outline:none;
+        }
+    </style>
+    <script>
+	    var enentId = getUrlParam("eventId");
+		var eventType = getUrlParam("type");
+    	$(function(){
+    		var _timer = {};
+			function delay_till_last(id, fn, wait) {
+			    if (_timer[id]) {
+			        window.clearTimeout(_timer[id]);
+			        delete _timer[id];
+			    }
+			 
+			    return _timer[id] = window.setTimeout(function() {
+			        fn();
+			        delete _timer[id];
+			    }, wait);
+			}
+    		//全场独赢下拉收缩事件
+    		$('#drop1').on('click',function(){
+    			delay_till_last('id', function(){
+    				$('.win').slideToggle("fast");
+                    if($('#drop1').find('img').attr("src") == "images/button_select.jpg")
+                    {
+                        $('#drop1').find('img').attr("src", "images/button_selects.png");
+                        $('#select1').css({"border-bottom": "1px solid #fff"});
+                    }
+                    else
+                    {
+                        $('#drop1').find('img').attr("src", "images/button_select.jpg");
+                        $('#select1').css({"border-bottom": "1px solid #fff"});
+                    }
+    			}, 300)
+    		});
+
+    		//全场让球下拉收缩事件
+    		$('#drop2').click(function(){
+    			delay_till_last('id', function(){
+    				$('.let_ball').slideToggle("fast");
+                    if($('#drop2').find('img').attr("src") == "images/button_select.jpg")
+                    {
+                        $('#drop2').find('img').attr("src", "images/button_selects.png");
+                        $('#select2').css({"border-bottom": "1px solid #fff"});
+                    }
+                    else
+                    {
+                        $('#drop2').find('img').attr("src", "images/button_select.jpg");
+                        $('#select2').css({"border-bottom": "1px solid #fff"});
+                    }
+    			}, 300)
+    		});
+
+    		//全场大小下拉收缩事件
+    		$('#drop3').click(function(){
+    			delay_till_last('id', function(){
+    				$('.tfull').slideToggle("fast");
+                    if($('#drop3').find('img').attr("src") == "images/button_select.jpg")
+                    {
+                        $('#drop3').find('img').attr("src", "images/button_selects.png");
+                        $('#select3').css({"border-bottom": "1px solid #fff"});
+                    }
+                    else
+                    {
+                        $('#drop3').find('img').attr("src", "images/button_select.jpg");
+                        $('#select3').css({"border-bottom": "1px solid #fff"});
+                    }
+    			}, 300)
+    		});
+
+    		//半场让球下拉收缩事件
+    		$('#drop4').click(function(){
+    			delay_till_last('id', function(){
+    				$('.halflet_ball').slideToggle("fast");
+                    if($('#drop4').find('img').attr("src") == "images/button_select.jpg")
+                    {
+                        $('#drop4').find('img').attr("src", "images/button_selects.png");
+                        $('#select4').css({"border-bottom": "1px solid #fff"});
+                    }
+                    else
+                    {
+                        $('#drop4').find('img').attr("src", "images/button_select.jpg");
+                        $('#select4').css({"boder-bottom": "none"});
+                    }
+    			}, 300)
+    		});
+
+    		//半场大小下拉收缩事件
+    		$('#drop5').click(function(){
+    			delay_till_last('id', function(){
+    				$('.thalf').slideToggle("fast");
+                    if($('#drop5').find('img').attr("src") == "images/button_select.jpg")
+                    {
+                        $('#drop5').find('img').attr("src", "images/button_selects.png");
+                        $('#select5').css({"border-bottom": "1px solid #fff"});
+                    }
+                    else
+                    {
+                        $('#drop5').find('img').attr("src", "images/button_select.jpg");
+                        $('#select5').css({"border-bottom": "1px solid #fff"});
+                    }
+    			}, 300)
+    		});
+    		
+    		
+    		getPeiLv(enentId);
+        	orderData.betType = eventType;
+			$("#touzhu_btn").click(function(){
+				//orderData.memberId = getStorageUser().id;
+				orderData.orderType = 0;
+				
+				var betMoney = $.trim($("#BetMoney").val());
+                var winMoney;
+				if(!betMoney){
+					alert("请输入金额");
+					return false;
+				} else {
+					var rel = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
+					if(!rel.test(betMoney)){
+						alert("输入金额金额不合法");
+						return false;
+					}
+					
+					if(betMoney==0){
+						alert("输入金额金必须大于0");
+						return false;
+					}
+					var userreg=/^[0-9]+([.]{1}[0-9]{1,2})?$/;
+					if(!userreg.test(betMoney)){
+						alert("下注金额最多只能两位小数！");
+					}
+					
+					if(betMoney < 10 || betMoney > 500000){
+						alert("交易单单笔限额10～500000元");
+						return false;
+					}
+				}
+
+                if(orderData.type == "ou" || orderData.type == "ah"){
+                    winMoney = formatterDouble((betMoney * (parseFloat(orderData.odds)+1)));
+                } else {
+                    winMoney = formatterDouble((betMoney * parseFloat(orderData.odds)));
+                }
+                var html = "<p style='font-size:0.14rem;margin:0.07rem 0.1rem 0.07rem 0.1rem;'>交易金额：" + betMoney + "</p>";
+                html += "<p style='font-size:0.14rem;margin:0 0.1rem 0.07rem 0.1rem;'>可赢金额：<span style='font-size:0.14rem;color:#2ebc8c;'>" + winMoney + "</span></p>";
+                html += "<p style='font-size:0.14rem;margin:0 0.1rem 0.07rem 0.1rem;'>确定进行下注吗？</p>";
+                if(eventType == 2)
+               	 	html += "<p style='margin:0.08rem 0.05rem 0 0.05rem;color:#777;font-size:0.12rem;'>*危险球提示：120秒内发生比分变化，系统将自动取消订单，退回本金。</p>"
+
+                layer.open({
+                    type: 1
+                    ,title: '投注确认'
+                    ,content: html 
+                    ,btn: ['确定下注', '取消']
+                    ,shade: 0.5
+                    ,yes: function(){
+                        orderData.sourceType = 1;
+                        orderData.betCount = betMoney;
+                        
+                        addOrder(orderData);
+                        layer.closeAll();
+                    }
+                    ,btn2: function(){
+                        layer.closeAll();
+                    }
+                });
+
+				
+			});
+			
+			
+			getMyOrderCount();
+        })
+
+        var xiadang = {
+            popLayer: function (obj) {
+                $(".BBorder").css("border-color", "#e3e3e3");
+                $(obj).css("border-color", "orange");
+                $(".xiadangLayer").show().animate({ bottom: "0" });
+            },
+            closeLayer: function () {
+                $(".xiadangLayer").hide().animate({ bottom: "-150px" });
+            }
+        }
+
+        function touzhu(obj) {
+            var currentSpan = $(obj);
+
+            currentSpan.parent().addClass("on");
+
+            xiadang.popLayer();
+
+        }
+        
+        function getPeiLv(eventId){
+        	var reqData = {
+        			eventId: eventId,
+        	};
+        	
+        	$.ajax({
+        		type: "POST",
+        		url: BaseUrl + "api/findEventOdds?timestamp=" +  (new Date()).getTime(),
+        		data: reqData,
+        		dataType: "json",
+        		cache: false,
+        		success: function(result){
+        			var code = result.code;
+        			if(code==SUCCESS_CODE){
+        				var data = result.result;
+        				if(data){
+        					var odds1x2 = data["1x2"];
+        					var oddsAh = data["ah"];
+        					var oddsAh1s = data["ah1s"];
+        					var event = data["eventForm"];
+        					var oddOu = data["ou"];
+        					var oddOu1s = data["ou1s"];
+        					
+        					var hostTeamName = event.homeTeamCnName;
+							var hostTeamId = event.homeAgoTeam;
+							var homeScore = event.wholeHomeScore;
+							var guestTeamName = event.awayTeamCnName;
+							var guestTeamId = event.awayAgoTeam;
+							var awayScore = event.wholeAwayScore;
+							var startdate = event.startDate;
+							var eventId = event.eventId;
+							var eventAgoId = event.eventAgoId;
+							var time = event.time;
+							
+							var liansaiName = event.leagueCnName;
+							var liansaiId = event.leagueId;
+							
+							var homeTeamCnName = event.homeTeamCnName;
+							var awayTeamCnName = event.awayTeamCnName;
+        					
+        					var teamHtml = "";
+        					teamHtml += '<div class="title_team">';
+        					teamHtml += homeTeamCnName + ' v ' + awayTeamCnName;
+        					teamHtml += '</div>';
+        					teamHtml += '<div class="title_time"><span style="font-size:0.24rem;">';
+        					 
+                            if(eventType == 2)
+                            {
+                                //比赛进行时间
+                                if(event.time){
+                                    teamHtml += event.time + ' <img src="images/in.gif" style="margin: 0 0 0.1rem 0.01rem"></img>';
+                                }
+                                teamHtml += "</span>";
+                                //比赛比分
+                                if(event.wholeHomeScore){
+                                    teamHtml += '<span style="color: #dd8f3a;font-size:0.24rem;">';
+                                    teamHtml += event.wholeHomeScore;
+                                    teamHtml += ':';
+                                    teamHtml += event.wholeAwayScore;
+                                    teamHtml += '</span>';
+                                }
+                                if(event.homeScore){
+                                    teamHtml += '<span style="color: #dd8f3a">';
+                                    teamHtml += '(' + event.homeScore + ':' + event.awayScore + ')';
+                                    teamHtml += '</span>';
+                                }
+                            }       					
+        					else
+                            {
+                                teamHtml += startdate;
+                            }
+
+                            teamHtml += '</div>';
+                            teamHtml += '<button id="refresh" onclick="location.reload();" type="button"></button>';
+        					
+        					$("#teamContent").html(teamHtml);
+        					
+        					//全场独赢
+        					var odds1x2Html = "";
+        					if(odds1x2 && odds1x2.length>0){
+        						$.each(odds1x2, function(i, val){
+        							var oid1x2 = val["1x2Oid"] != undefined ? val["1x2Oid"] : ""; 
+        							var hostOdds1x2 = val["1x2hostOdds"] != undefined ? val["1x2hostOdds"] : ""; // 主队独赢赔率
+        							var hostId1x2 = val["1x2hostId"] != undefined ? val["1x2hostId"] : "";     //主队独赢赔率对应id
+        							var guestOdds1x2 = val["1x2guestOdds"] != undefined ? val["1x2guestOdds"] : ""; //客队独赢赔率
+        							var drawOdds1x2 = val["1x2drawOdds"] != undefined ? val["1x2drawOdds"] : ""; //  独赢和对应赔率
+        							
+        							odds1x2Html += '<li>';
+                					odds1x2Html += '<div class="win_left">' + homeTeamCnName + '</div>';
+                					odds1x2Html += '<div class="win_right"><span class="BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + oid1x2 + '" odds="' + hostOdds1x2 + '" type="1x2" state="1" scope="ord" dataId="' + hostId1x2 + '">' + hostOdds1x2 + '</span></div>';
+                					odds1x2Html += '</li>';
+                					odds1x2Html += '<li>';
+           							odds1x2Html += '<div class="win_left">' + awayTeamCnName + '</div>';
+           							odds1x2Html += '<div class="win_right"><span class="BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + oid1x2 + '" odds="' + guestOdds1x2 + '" type="1x2" state="2" scope="ord" dataId="' + hostId1x2 + '">' + guestOdds1x2 + '</span></div>';
+           							odds1x2Html += '</li>';
+           							odds1x2Html += '<li>';
+           							odds1x2Html += '<div class="win_left">和局</div>';
+           							odds1x2Html += '<div class="win_right"><span class="BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + oid1x2 + '" odds="' + drawOdds1x2 + '" type="1x2" state="3" scope="ord" dataId="' + hostId1x2 + '">' + drawOdds1x2 + '</span></div>';
+           							odds1x2Html += '</li>';
+        							
+        						})
+        					}
+                            else
+                            {
+                                $('#select1').hide();
+                            }
+        					$("#odds1x2Html").html(odds1x2Html);
+        					
+   							//全场让球
+   							var ahHtml = "";
+        					if(oddsAh && oddsAh.length>0){
+        						$.each(oddsAh, function(i, val){
+        							var ahOid = val["ahOid"] != undefined ? val["ahOid"] : ""; 
+									var ahId = val.ahId != undefined ? val.ahId : ""; //    主队让分赔率id
+									var ahDParam = val.ahDParam != undefined ? val.ahDParam : ""; // 基率 +主队让 –客队让
+									var ahHostOdds = val.ahHostOdds != undefined ? val.ahHostOdds : ""; //  主队让分赔率
+									var ahGuestOdds = val.ahGuestOdds != undefined ? val.ahGuestOdds : ""; //  客队让分赔率
+									
+									ahHtml += '<li>';
+									ahHtml += '<div class="let_ball_left">' + homeTeamCnName + '</div>';
+									ahHtml += '<div class="let_ball_right">';
+									ahHtml += '<span class="span_left">';
+									if(parseFloat(ahDParam) >= 0){
+										ahHtml += formatOdds(ahDParam);
+									} 
+									ahHtml += '</span>';
+									ahHtml += '<span class="span_right BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + ahOid + '" odds="' + ahHostOdds + '" type="ah" state="1" scope="ord" dataId="' + ahId + '" ahDparam="' + ahDParam + '" ahTeam="' + (parseFloat(ahDParam) <= 0 ? 2:1 ) + '">'+ahHostOdds+'</span>';
+									ahHtml += '</div>';
+									ahHtml += '</li>';
+									ahHtml += '<li>';
+									ahHtml += '<div class="let_ball_left">' + awayTeamCnName + '</div>';
+									ahHtml += '<div class="let_ball_right">';
+									ahHtml += '<span class="span_left">';
+									if(parseFloat(ahDParam) < 0){
+										ahHtml += formatOdds(-ahDParam);
+									}
+									ahHtml += '</span>';
+									ahHtml += '<span class="span_right BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + ahOid + '" odds="' + ahGuestOdds + '" type="ah" state="2" scope="ord" dataId="' + ahId + '" ahDparam="' + ahDParam + '" ahTeam="' + (parseFloat(ahDParam) <= 0 ? 2:1 ) + '">'+ahGuestOdds+'</span>';
+									ahHtml += '</div>';
+									ahHtml += '</li>';
+									
+        						});
+        					}
+                            else
+                            {
+                                $('#select2').hide();
+                            }
+
+   							$("#ahHtml").html(ahHtml);
+   							
+        					//全场大小
+        					var ouHtml = "";
+        					if(oddOu && oddOu.length>0){
+        						$.each(oddOu, function(i, val){
+        							var ouOid = val["ouOid"] != undefined ? val["ouOid"] : ""; 
+									var ouId = val.ouId != undefined ? val.ouId : ""; //    大对应赔率id
+									var ouOverOdds = val.ouOverOdds != undefined ? val.ouOverOdds : ""; //  大对应现有赔率
+									var ouUnderOdds = val.ouUnderOdds != undefined ? val.ouUnderOdds : ""; //  小对应现有赔率
+									var ouDParam = val.ouDParam != undefined ? val.ouDParam : ""; //  大对应最大赔率
+									
+									ouHtml += '<tr>';
+									ouHtml += '<td>';
+									ouHtml += '<div class="full_left">大</div>';
+									ouHtml += '<div class="full_right">';
+									ouHtml += '<span class="full_right_l">' + formatOdds(ouDParam) + '</span>';
+									ouHtml += '<span class="full_right_r BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + ouOid + '" odds="' + ouOverOdds + '"  type="ou" state="1" scope="ord" dataId="' + ouId + '" ouDparam="' + ouDParam + '">'+ouOverOdds+'</span>';
+									ouHtml += '</div>';
+									ouHtml += '</td>';
+									ouHtml += '<td style="border-left: 2px solid #8c8c8c;">';
+									ouHtml += '<div class="full_left">小</div>';
+									ouHtml += '<div class="full_right">';
+									ouHtml += '<span class="full_right_l">' + formatOdds(ouDParam) + '</span>';
+									ouHtml += '<span class="full_right_r BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + ouOid + '" odds="' + ouUnderOdds + '"  type="ou" state="2" scope="ord" dataId="' + ouId + '" ouDparam="' + ouDParam + '">'+ouUnderOdds+'</span>';
+									ouHtml += '</div>';
+									ouHtml += '</td>';
+									ouHtml += '</tr>';
+									
+        						});
+        					}
+                            else
+                            {
+                                $('#select3').hide();
+                            }
+
+        					$("#ouHtml").html(ouHtml);
+							
+							var ah1sHtml = "";
+							if(oddsAh1s && oddsAh1s.length>0){
+								//半场让球
+        						$.each(oddsAh1s, function(i, val){
+        							var ah1sOid = val["ah1sOid"] != undefined ? val["ah1sOid"] : ""; 
+									var ah1sId = val.ah1sId != undefined ? val.ah1sId : ""; //    主队让分赔率id
+									var ah1sDParam = val.ah1sDParam != undefined ? val.ah1sDParam : ""; // 基率 +主队让 –客队让
+									var ah1sHostOdds = val.ah1sHostOdds != undefined ? val.ah1sHostOdds : ""; //  主队让分赔率
+									var ah1sGuestOdds = val.ah1sGuestOdds != undefined ? val.ah1sGuestOdds : ""; //  客队让分赔率
+									
+									ah1sHtml += '<li>';
+									ah1sHtml += '<div class="halflet_ball_left">' + homeTeamCnName + '</div>';
+									ah1sHtml += '<div class="halflet_ball_right">';
+									ah1sHtml += '<span class="halflet_span_left">';
+									if(parseFloat(ah1sDParam) >= 0){
+										ah1sHtml += formatOdds(ah1sDParam);
+									}
+									ah1sHtml += '</span>';
+									ah1sHtml += '<span class="halflet_span_right BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + ah1sOid + '" odds="' + ah1sHostOdds + '" type="ah" state="1" scope="1h" dataId="' + ah1sId + '" ahDparam="' + ah1sDParam + '" ahTeam="' + (parseFloat(ah1sDParam) <= 0 ? 2:1 ) + '">'+ah1sHostOdds+'</span>';
+									ah1sHtml += '</div>';
+									ah1sHtml += '</li>';
+									ah1sHtml += '<li>';
+									ah1sHtml += '<div class="halflet_ball_left">' + awayTeamCnName + '</div>';
+									ah1sHtml += '<div class="halflet_ball_right">';
+									ah1sHtml += '<span class="halflet_span_left">';
+									if(parseFloat(ah1sDParam) < 0){
+										ah1sHtml += formatOdds(-parseFloat(ah1sDParam));
+									}
+									ah1sHtml += '</span>';
+									ah1sHtml += '<span class="halflet_span_right BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + ah1sOid + '" odds="' + ah1sGuestOdds + '" type="ah" state="2" scope="1h" dataId="' + ah1sId + '" ahDparam="' + ah1sDParam + '" ahTeam="' + (parseFloat(ah1sDParam) <= 0 ? 2:1 ) + '">'+ah1sGuestOdds+'</span>';
+									ah1sHtml += '</div>';
+									ah1sHtml += '</li>';
+        						});
+							}
+                            else
+                            {
+                                $('#select4').hide();
+                            }
+        					$("#ah1sHtml").html(ah1sHtml);
+        					
+
+        					//半场大小
+        					var ou1sHtml = "";
+        					if(oddOu1s && oddOu1s.length>0){
+        						$.each(oddOu1s, function(i, val){
+        							var ou1sOid = val["ou1sOid"] != undefined ? val["ou1sOid"] : ""; 
+									var ou1sId = val.ou1sId != undefined ? val.ou1sId : ""; //    大对应赔率id
+									var ou1sOverOdds = val.ou1sOverOdds != undefined ? val.ou1sOverOdds : ""; //  大对应现有赔率
+									var ou1sUnderOdds = val.ou1sUnderOdds != undefined ? val.ou1sUnderOdds : ""; //  小对应现有赔率
+									var ou1sDParam = val.ou1sDParam != undefined ? val.ou1sDParam : ""; //  大对应最大赔率
+									
+									ou1sHtml += '<tr>';
+									ou1sHtml += '<td>';
+									ou1sHtml += '<div class="half_left">大</div>';
+									ou1sHtml += '<div class="half_right">';
+									ou1sHtml += '<span class="half_right_l">' + formatOdds(ou1sDParam) + '</span>';
+									ou1sHtml += '<span class="half_right_r BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + ou1sOid + '" odds="' + ou1sOverOdds + '" type="ou" state="1" scope="1h" dataId="' + ou1sId + '" ouDparam="' + ou1sDParam + '">'+ou1sOverOdds+'</span>';
+									ou1sHtml += '</div>';
+									ou1sHtml += '</td>';
+									ou1sHtml += '<td style="border-left: 2px solid #8c8c8c;">';
+									ou1sHtml += '<div class="half_left">小</div>';
+									ou1sHtml += '<div class="half_right">';
+									ou1sHtml += '<span class="half_right_l">' + formatOdds(ou1sDParam) + '</span>';
+									ou1sHtml += '<span class="half_right_r BBorder" liansaiName="' + liansaiName + '" liansaiId="' + liansaiId + '" eventId="' + eventId + '" startTime="' + startdate + '" hostTeamName="' + hostTeamName + '" hostTeamId="' + hostTeamId + '" guestTeamName="' + guestTeamName + '" guestTeamId="' + guestTeamId + '" time="' + time + '" score="' + homeScore + '-' + awayScore + '" oid="' + ou1sOid + '" odds="' + ou1sUnderOdds + '" type="ou" state="2" scope="1h" dataId="' + ou1sId + '" ouDparam="' + ou1sDParam + '">' + ou1sUnderOdds + '</span>';
+									ou1sHtml += '</div>';
+									ou1sHtml += '</td>';
+									ou1sHtml += '</tr>';
+        						});
+        					}
+                            else
+                            {
+                                $('#select5').hide();
+                            }
+							$("#ou1sHtml").html(ou1sHtml);
+        					
+        					$(".BBorder").click(function(){
+        						var odds = $(this).attr("odds");
+        						if(odds){
+	        						xiadang.popLayer(this);
+	        						bindOdds(this);
+        						}
+        					});
+        				}
+        				clearTimeout(timer);
+        				settime();
+        			} else if(result.code == UNLOGIN){
+        				unLogin();
+        			}
+        		}
+        	});
+
+        }
+        
+        var orderData= {};
+        /**
+         * 下注绑定事件
+         * @param _this
+         */
+        function bindOdds(_this){
+        	var oid = $(_this).attr("oid");
+        	var liansaiName = $(_this).attr("liansaiName");
+        	var liansaiId = $(_this).attr("liansaiId");
+        	var eventId = $(_this).attr("eventId");
+        	var eventAgoId = $(_this).attr("eventAgoId");
+        	var startTime = $(_this).attr("startTime");
+        	var hostTeamName = $(_this).attr("hostTeamName");
+        	var hostTeamId = $(_this).attr("hostTeamId");
+        	var guestTeamName = $(_this).attr("guestTeamName");
+        	var guestTeamId = $(_this).attr("guestTeamId");
+        	var scope = $(_this).attr("scope");
+        	var type = $(_this).attr("type");
+        	var state = $(_this).attr("state");
+        	var dataId = $(_this).attr("dataId");
+        	var odds = $(_this).attr("odds");
+        	
+        	var ahDparam = $(_this).attr("ahDparam");
+        	var ouDparam = $(_this).attr("ouDparam");
+        	var ahTeam = $(_this).attr("ahTeam");
+        	
+        	var half = $(_this).attr("currentPeriod"); //1上半场 2下半场
+        	var playTime = $(_this).attr("time");//注时比赛开始时长
+        	var score = $(_this).attr("score"); //下注时比赛比分
+        	
+        	orderData.oid = oid; //联赛id
+        	orderData.tournamentTemplate = liansaiId; //联赛id
+        	orderData.tournamentTemplateName = liansaiName; //联赛名称
+        	orderData.eventId = eventId; //赛程id
+        	if(eventAgoId)
+        		orderData.eventAgoId = eventAgoId; //赛程id
+        	orderData.startTime = startTime; //比赛开始事件
+        	orderData.odds = odds; //赔率
+        	orderData.oddsId = dataId; //赔率id
+        	orderData.teamId = hostTeamId; //主队id
+        	orderData.teamName = hostTeamName; //主队名称
+        	orderData.guestTeamId = guestTeamId; //客队id
+        	orderData.guestTeamName = guestTeamName; //客队名称
+        	orderData.scope = scope; //场次
+        	orderData.type = type; //对应类型
+        	orderData.state = state; //主客队之分 1主,2客,3不区分 这个只存在与大小
+        	if(ahDparam < 0){
+        		orderData.ahDparam = -ahDparam; //让球数
+        	} else {
+        		orderData.ahDparam = ahDparam; //让球数
+        	}
+        	orderData.ouDparam = ouDparam; //大小对应最大赔率
+        	orderData.ahTeam = ahTeam; //1:主让 2客让
+        	
+        	orderData.half = half; //1上半场 2下半场
+        	orderData.playTime = playTime;//注时比赛开始时长
+        	orderData.score = score;  //下注时比赛比分
+        	
+        	
+        	$("#liansai").html(liansaiName);
+        	$("#hostName").html(hostTeamName);
+        	$("#guestName").html(guestTeamName);
+        	//$("#odds").html(odds);
+        	
+        	if(scope == "1h"){
+        		var ht = "";
+        		if(type == "1x2"){
+        			ht += '半场独赢 ';
+        			if(state == 1){
+        				ht += hostTeamName ;
+        			} else if(state == 2){
+        				ht += guestTeamName;
+        			} else if(state == 3){
+        				ht += "和";
+        			}
+        			ht += '  @' + odds;
+        		} else if(type == "ah"){
+        			ht += '半场让球 ';
+        			if(state == 1){
+        				ht += hostTeamName;
+        				if(ahTeam == 1){
+        					ht += "-";
+        				} else if(ahTeam == 2){
+        					ht += "+";
+        				}
+        			} else if(state == 2){
+        				ht += guestTeamName;
+        				if(ahTeam == 1){
+        					ht += "+";
+        				} else if(ahTeam == 2){
+        					ht += "-";
+        				}
+        			}
+        			ht += formatOdds(orderData.ahDparam);
+        			ht += '  @' + odds;
+        		} else if(type == "ou"){
+        			if(state == 1){
+        				ht += '半场大小球 大' + formatOdds(ouDparam) + '  @' + odds;
+        			} else if(state == 2){
+        				ht += '半场大小球 小' + formatOdds(ouDparam) + '  @' + odds;
+        			}
+        		}
+        		$("#info1").html(ht);
+        	} else if(scope == "ord"){
+        		var ht = "";
+        		if(type == "1x2"){
+        			ht += '全场独赢 ';
+        			if(state == 1){
+        				ht += hostTeamName ;
+        			} else if(state == 2){
+        				ht += guestTeamName;
+        			} else if(state == 3){
+        				ht += "和";
+        			}
+        			ht += '  @' + odds;
+        		} else if(type == "ah"){
+        			ht += '全场让球 ';
+        			if(state == 1){
+        				ht += hostTeamName;
+        				if(ahTeam == 1){
+        					ht += "-";
+        				} else if(ahTeam == 2){
+        					ht += "+";
+        				}
+        			} else if(state == 2){
+        				ht += guestTeamName;
+        				if(ahTeam == 1){
+        					ht += "+";
+        				} else if(ahTeam == 2){
+        					ht += "-";
+        				}
+        			}
+        			ht += formatOdds(orderData.ahDparam);
+        			ht += '  @' + odds;
+        		} else if(type == "ou"){
+        			if(state == 1){
+        				ht += '全场大小球 大' + formatOdds(ouDparam) + '  @' + odds;
+        			} else if(state == 2){
+        				ht += '全场大小球 小' + formatOdds(ouDparam) + '  @' + odds;
+        			}
+        		}
+        		$("#info1").html(ht);
+        	} else if(scope == "2h"){
+        		var ht = "";
+        		if(type == "1x2"){
+        			ht += '下半场独赢 ';
+        			if(state == 1){
+        				ht += hostTeamName ;
+        			} else if(state == 2){
+        				ht += guestTeamName;
+        			} else if(state == 3){
+        				ht += "和";
+        			}
+        			ht += '  @' + odds;
+        		} else if(type == "ah"){
+        			ht += '下半场让球 ';
+        			if(state == 1){
+        				ht += hostTeamName;
+        				if(ahTeam == 1){
+        					ht += "-";
+        				} else if(ahTeam == 2){
+        					ht += "+";
+        				}
+        			} else if(state == 2){
+        				ht += guestTeamName;
+        				if(ahTeam == 1){
+        					ht += "+";
+        				} else if(ahTeam == 2){
+        					ht += "-";
+        				}
+        			}
+        			ht += formatOdds(orderData.ahDparam);
+        			ht += '  @' + odds;
+        		} else if(type == "ou"){
+        			if(state == 1){
+        				ht += '下半场大小球 大' + formatOdds(ouDparam) + '  @' + odds;
+        			} else if(state == 2){
+        				ht += '下半场大小球 小' + formatOdds(ouDparam) + '  @' + odds;
+        			}
+        		}
+        		$("#info1").html(ht);
+        	}
+        	
+        	$("#winMoney").html(($("#BetMoney").val() * parseFloat($("#0ioradio_id").html())).toFixed(2));
+        }
+
+        /**
+         * 确定下注
+         */
+        function addOrder(reqData){
+        	$.ajax({
+        		type: "POST",
+        		url: BaseUrl + "order/addOrder?timestamp=" +  (new Date()).getTime(),
+        		data: reqData,
+        		dataType: "json",
+        		success: function(result){
+        			if (result.code == SUCCESS_CODE) {
+        				$("#BetMoney").val("")
+        				xiadang.closeLayer();
+        				getMyOrderCount();
+        				alert('下注成功');
+        			} else if(result.code == "11"){
+        				layer.alert(result.msg, {
+        					title : '错误信息'
+        				},function (index, layero) {
+        					getPeiLv(enentId);
+        					layer.close(index);
+        			    });
+        			} else if(result.code == UNLOGIN){
+        				unLogin();
+        			} else {
+        				alert(result.msg);
+        			}
+        		}
+        	});
+        }
+        
+        var countdown=0;
+        if(eventType == 2){
+        	countdown = 15;
+        } else {
+        	countdown = 150;
+        }
+        var timer;
+        function settime() {  
+            if (countdown == 0) { 
+            	if(eventType == 2){
+                	countdown = 15;
+                } else {
+                	countdown = 150;
+                }
+                getPeiLv(enentId);
+            } else { 
+            	$("#time").html(countdown);
+            	countdown--; 
+        		timer = setTimeout(function() {  
+                    settime()  
+                },15000)  
+            }  
+
+        } 
+        
+        function formatOdds(odds){
+        	var odds = odds.toString();
+        	if(odds.indexOf(".25") > -1){
+        		var a = odds.substring(0, odds.indexOf("."));
+        		return a + "/" + (a + ".5");
+        	} else if(odds.indexOf(".75") > -1){
+        		var a = odds.substring(0, odds.indexOf("."));
+        		return (a + ".5") + "/" + (parseInt(a) + 1);
+        	}else {
+        		return odds;
+        	}
+        }
+
+    	var xiadang = {
+            popLayer: function (obj) {
+                $(".BBorder").css('border-color', '#e3e3e3');
+                $(obj).css('border-color', 'orange');
+                $(".xiadangLayer").show().animate({ bottom: "0" });
+            },
+            closeLayer: function () {
+                $(".xiadangLayer").hide().animate({ bottom: "-150px" });
+            }
+        }
+
+        function touzhu(obj) {
+            var currentSpan = $(obj);
+
+            currentSpan.parent().addClass("on");
+
+            xiadang.popLayer();
+
+        }
+    	
+    	//获取订单数据亮
+    	function getMyOrderCount(){
+   			$.ajax({
+   				type: "GET",
+   				url: BaseUrl + "order/getMyOrderCount?timestamp=" +  (new Date()).getTime(),
+   				dataType: "json",
+   				cache:false,
+   				success: function(result){
+   					if (result.code == SUCCESS_CODE) {
+   						$("#myOrderCount").html(result.result)
+   					} else if(result.code == UNLOGIN){
+   					} else {
+   					}
+   				}
+   			})
+    	}
+    </script>
+</head>
+<body>
+	<div class="head_logo">
+		<div class="head_left">
+			<a href="sport.html">
+				<img src="images/button_back.jpg" />
+			</a><span><img src="images/logo.jpg" /></span>
+		</div>
+		<div class="head_right">
+            <a href="login/record.html">
+    			<div class="describe">注单查询</div>
+    			<div class="record_icon" id="myOrderCount">0</div>
+            </a>
+		</div>
+	</div>
+	<div id="teamContent" class="content">
+		<div class="title_team">
+			皇家玛德里 v 利物浦 
+		</div>
+		<div class="title_time">
+			<span style="font-size: 0.24rem;">0<img src="images/in.gif" style="margin: 0 0 0.1rem 0.01rem"></span> <span style="color: #dd8f3a;font-size: 0.24rem;">0 : 0</span>
+		</div>
+        <button id="refresh" onclick="location.reload();" type="button"></button>
+	</div>
+	<div class="drop_panel" id="select1">
+		<span class="drop_icon" id="drop1">
+			<img src="images/button_select.jpg" alt="">
+		</span>
+		<span class="drop_title">
+			全场独赢
+		</span>
+	</div>
+	<ul class="win" id="odds1x2Html">
+		<li>
+			<div class="win_left">
+				瓦勒伦加
+			</div>
+			<div class="win_right">
+				<span class="xiadang" onclick="xiadang.popLayer(this)">
+					2.05
+				</span>
+			</div>
+		</li>
+		<li>
+			<div class="win_left">
+				力勒斯特罗姆
+			</div>
+			<div class="win_right">
+				<span class="xiadang" onclick="xiadang.popLayer(this)">
+					3.45
+				</span>
+			</div>
+		</li>
+		<li>
+			<div class="win_left">
+				和局
+			</div>
+			<div class="win_right">
+				<span>
+					3.65
+				</span>
+			</div>
+		</li>
+	</ul>
+	<div class="drop_panel" id="select2">
+		<span class="drop_icon" id="drop2">
+			<img src="images/button_select.jpg" alt="">
+		</span>
+		<span class="drop_title">
+			全场让球
+		</span>
+	</div>
+	<ul class="let_ball" id="ahHtml">
+		<li>
+			<div class="let_ball_left">
+				皇家马德里
+			</div>
+			<div class="let_ball_right">
+				<span class="span_left">0.65</span>
+				<span class="span_right">0.62</span>
+			</div>
+		</li>
+		<li>
+			<div class="let_ball_left">
+				利物浦
+			</div>
+			<div class="let_ball_right">
+				<span class="span_left">0/0.5</span>
+				<span class="span_right">0.89</span>
+			</div>
+		</li>
+		<li>
+			<div class="let_ball_left">
+				皇家马德里
+			</div>
+			<div class="let_ball_right">
+				<span class="span_left"></span>
+				<span class="span_right">1.04</span>
+			</div>
+		</li>
+	</ul>
+	<div class="drop_panel" id="select3">
+		<span class="drop_icon" id="drop3">
+			<img src="images/button_select.jpg" alt="">
+		</span>
+		<span class="drop_title">
+			全场大小
+		</span>
+	</div>
+    <div class="tfull">
+        <table class="full" id="ouHtml">
+            <tr>
+                <td>
+                    <div class="full_left">大</div>
+                    <div class="full_right">
+                        <span class="full_right_l"></span>
+                        <span class="full_right_r">0.94</span>
+                    </div>
+                </td>
+                <td style="border-left: 2px solid #8c8c8c;">
+                    <div class="full_left">小</div>
+                    <div class="full_right">
+                        <span class="full_right_l"></span>
+                        <span class="full_right_r">0.96</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="full_left">大</div>
+                    <div class="full_right">
+                        <span class="full_right_l"></span>
+                        <span class="full_right_r">1.28</span>
+                    </div>
+                </td>
+                <td style="border-left: 2px solid #8c8c8c;">
+                    <div class="full_left">小</div>
+                    <div class="full_right">
+                        <span class="full_right_l"></span>
+                        <span class="full_right_r">0.68</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="full_left">大</div>
+                    <div class="full_right">
+                        <span class="full_right_l"></span>
+                        <span class="full_right_r">0.56</span>
+                    </div>
+                </td>
+                <td style="border-left: 2px solid #8c8c8c;">
+                    <div class="full_left">小</div>
+                    <div class="full_right">
+                        <span class="full_right_l">0/0.5</span>
+                        <span class="full_right_r">1.51</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="full_left">大</div>
+                    <div class="full_right">
+                        <span class="full_right_l">1/1.5</span>
+                        <span class="full_right_r">1.75</span>
+                    </div>
+                </td>
+                <td style="border-left: 2px solid #8c8c8c;">
+                    <div class="full_left">小</div>
+                    <div class="full_right">
+                        <span class="full_right_l">1/1.5</span>
+                        <span class="full_right_r">0.47</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+	
+	<div class="drop_panel" id="select4">
+		<span class="drop_icon" id="drop4">
+			<img src="images/button_select.jpg" alt="">
+		</span>
+		<span class="drop_title">
+			半场让球
+		</span>
+	</div>
+	<ul class="halflet_ball" id="ah1sHtml">
+		<li>
+			<div class="halflet_ball_left">
+				皇家马德里
+			</div>
+			<div class="halflet_ball_right">
+				<span class="halflet_span_left">0</span>
+				<span class="halflet_span_right">0.74</span>
+			</div>
+		</li>
+		<li>
+			<div class="halflet_ball_left">
+				利物浦
+			</div>
+			<div class="halflet_ball_right">
+				<span class="halflet_span_left"></span>
+				<span class="halflet_span_right">1.19</span>
+			</div>
+		</li>
+		<li>
+			<div class="halflet_ball_left">
+				皇家马德里
+			</div>
+			<div class="halflet_ball_right">
+				<span class="halflet_span_left">0/0.5</span>
+				<span class="halflet_span_right">1.28</span>
+			</div>
+		</li>
+	</ul>
+	<div class="drop_panel" id="select5">
+		<span class="drop_icon" id="drop5">
+			<img src="images/button_select.jpg" alt="">
+		</span>
+		<span class="drop_title">
+			半场大小
+		</span>
+	</div>
+    <div class="thalf">
+        <table class="half" id="ou1sHtml">
+            <tr>
+                <td>
+                    <div class="half_left">大</div>
+                    <div class="half_right">
+                        <span class="half_right_l"></span>
+                        <span class="half_right_r">0.94</span>
+                    </div>
+                </td>
+                <td style="border-left: 2px solid #8c8c8c;">
+                    <div class="half_left">小</div>
+                    <div class="half_right">
+                        <span class="half_right_l"></span>
+                        <span class="half_right_r">0.96</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="half_left">大</div>
+                    <div class="half_right">
+                        <span class="half_right_l"></span>
+                        <span class="half_right_r">1.28</span>
+                    </div>
+                </td>
+                <td style="border-left: 2px solid #8c8c8c;">
+                    <div class="half_left">小</div>
+                    <div class="half_right">
+                        <span class="half_right_l"></span>
+                        <span class="half_right_r">0.68</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+	<!--下单弹出层-->
+    <div class="xiadangLayer" style="display:none">
+        <h1 align="right">
+            <a href="javascript:;" onclick="xiadang.closeLayer()" class="close_btn">
+                <i class="iconfont icon-close"></i>
+            </a>
+        </h1>
+
+        <div class="tz_info">
+            <div>
+                <p class="pt8" id="liansai"  style="font-size: 16px;">全场大小</p>
+                <p class="pt8">
+                    <i id="hostName" class="iconfont" style="margin-right: 10px;"></i>
+                    VS
+                    <i class="iconfont" id="guestName" style="margin-left: 10px;"></i>
+                </p>
+                <p class="pt10">
+                    <span class="red" id="info1" style="font-size: 16px;"></span>
+                </p>
+                <span class="red font30 pull-right" style="position:relative;top:-55px; display: none;">@<i id="odds" class="font30"></i></span>
+            </div>
+        </div>
+
+        <div class="btn_area">
+            <input id="BetMoney" name="" placeholder="请输入金额" type="text" />
+            <a id="touzhu_btn" href="#" class="touzhu_btn pull-right">确认投注</a>
+        </div>
+    </div>
+</body>
+</html>

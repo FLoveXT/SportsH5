@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>反馈</title>
+    <meta name="keywords" content="">
+    <link href="../css/iconfont.css" rel="stylesheet">
+    <link href="../css/login.css" rel="stylesheet">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../layui/layui.js"></script>
+    <script src="../js/common.js"></script>
+    <script>
+	    layui.use('form', function () {
+	        var layer= layui.layer;
+	    });
+        $(document).ready(function (e) {
+
+            $(".userinfo_menu li").click(function () {
+                var index = $(".userinfo_menu li").index(this);
+                $(".userinfo_menu li").removeClass("on");
+                $(this).addClass("on");
+                $(".content").hide();
+                $(".content").eq(index).show();
+            })
+        });
+
+
+
+    </script>
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        table tr td {
+            padding: 0;
+        }
+
+        .container{padding:10px;}
+        .feedbackArea{background: #fff;}
+        .textarea{width:100%;padding-top:6px;text-indent:4px;border:#efefef solid 0;}
+        .uploadImg{border-top:#efefef solid 1px;margin-top: 6px;}
+        .uploadImg i{font-size: 40px;color: #c3c3c3}
+        .uploadImg img{width: 40px;margin-left: 4px; position: relative;top:2px;}
+
+        .uploadImg td{padding:10px 4px;}
+
+       .feedbackArea .btn{display:block;background: #dd6600; solid: 1px;color:#fff;margin: 10px;}
+       .workTime{padding:10px;font-size: 12px;color: #afafaf}
+    </style>
+
+</head>
+
+<body>
+    <div class="title">
+        <a href="javascript:history.go(-1)" class="pull-left">
+            <i class="iconfont icon-left_arrow back_icon"></i>
+        </a>意见反馈</div>
+    <div style="height:50px;"></div>
+
+
+<div class="container">
+
+    <div class="feedbackArea">
+        <textarea name="content"  class="textarea" id="content" placeholder=" 请输入您的宝贵意见" rows="8"></textarea>
+        <div class="uploadImg">
+            <table>
+                <tr>
+                    <td style="padding-left:10px;"><i class="iconfont icon-add1" onclick="clickFile()"></i><input type="file" id="file" onchange="readFile(this)" style="display: none;"></td>
+                    <td id="imageUrl"><!--<img src="../images/feedback_img.jpg"><img src="../images/feedback_img.jpg"><img src="../images/feedback_img.jpg"><img src="../images/feedback_img.jpg">--></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    <p class="mt10"><a href="#" class="btn" onclick="addFeedBack()">提交</a></p>
+    <div class="workTime mt10">
+        <p>客服电话：0775-26598888</p>
+        <p>工作时间：每周一至周日 8:30-21:30</p>
+        <p class="mt10">客服QQ：718607086</p>
+        <p>工作时间：每周一至周日 8:30-21:30</p>
+    </div>
+</div>
+
+
+
+
+
+
+</body>
+<script>
+    function clickFile() {
+        $("#file").click();
+        console.log($("#file"));
+    }
+
+
+    function words_deal(obj) {
+        var curLength = $(obj).val().length;
+        if(curLength>500) {
+            var num = $(obj).val().substr(0,500);
+            $(obj).val(num);
+            alert("超过字数限制，多出的字将被截断！" );
+        } else {
+            $(obj).next().find(".userCriticismAddTxt").text(0 + $(obj).val().length+'/500');
+        }
+    }
+
+
+    function showCamera() {
+        $('.userCriticismCamera').show();
+    }
+
+    function starSelect(obj) {
+        var index = $(obj).index();
+        $(obj).closest('div').find('img:gt(' + index + ')').attr('src','../../img/my/icon/statNot.png');
+        $(obj).closest('div').find('img:lt(' + (index + 1) + ')').attr('src','../../img/my/icon/stat.png');
+
+        $(obj).closest('div').find('img').removeClass('active');
+        $(obj).closest('div').find('img:eq(' + index + ')').addClass('active');
+    }
+
+    function readFile(obj){
+        var file = obj.files[0];
+        //判断类型是不是图片
+        alert();
+        if(!/image\/\w+/.test(file.type)) {
+            alert("请确保文件为图像类型");
+            return false;
+        }
+        $("#pictureName").append(file.name);
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e){
+            $(obj).parent().next().prepend('<img  class="blah userCriticismCamera fsM2" src="'+e.target.result+'" alt="" />');
+        }
+    }
+
+    function addFeedBack() {
+        var content = $("#content").html();
+        console.log(content);
+        var images = "";
+        $("#imageUrl").find('img.userCriticismCamera').each(function(e,obj) {
+            var img = $(obj).attr('src').substr($(this).attr('src').indexOf('base64,') + 7);
+            images += "," + img;
+        });
+        $.ajax({
+            type:"POST",
+            url:BaseUrl+"/user/addFeedback?timestamp=" +  (new Date()).getTime(),
+            data:{"content":content,"imgUrl":images},
+            dataType: "json",
+            cache: false,
+            async:false,
+            success: function(result) {
+                console.log(result);
+                window.location="../my.html";
+            }
+
+        });
+    }
+
+    // 提交评论
+    function raty() {
+        var goodsComments = '{"evaluate":[';
+        var index = 0;
+        $(".goodsComments").each(function(e) {
+            var comment = $(this).data();
+            comment.gevalContent = $(this).find('textarea').val() || '好评！';
+            comment.gevalScore = $(this).find('.score img.active').data('score');
+            if(comment.gevalScore > 3)
+                comment.comment = 1;
+            else if(comment.gevalScore == 3)
+                comment.comment = 2;
+            else if(comment.gevalScore < 3)
+                comment.comment = 3;
+
+            // 处理图片
+            var images = "";
+            $(this).find('img.userCriticismCamera').each(function(e) {
+                var img = $(this).attr('src').substr($(this).attr('src').indexOf('base64,') + 7);
+                images += "," + img;
+            });
+            if(images != "") {
+                images = images.substr(1);
+                APP.ajax(CONFIG.apiUrl.saveImage, 'POST', {images:images, goodsId: comment.goodsid}, function(data){
+                    comment.gevalImage = data.imgpath;
+                });
+            } else {
+                comment.gevalImage = "";
+            }
+
+            comment.goodsId = comment.goodsid;
+            comment.goodsName = comment.goodsname;
+            comment.goodsPrice = comment.goodsprice;
+            comment.specInfo = comment.specinfo;
+
+            index ++;
+            goodsComments += JSON.stringify(comment) + ',';
+        });
+
+        goodsComments = goodsComments.substr(0, goodsComments.length-1);
+        goodsComments += ']}';
+
+        var data = {
+            userId: user.userId,
+            orderId: params.orderid,
+            userImg: user.userIcon,
+            userName: user.nickName,
+            logisticsScore: $("#logisticsScore img.active").data('score'),
+            serviceScore: $("#serviceScore img.active").data('score'),
+            gevalIsAnonymous: 1,
+            goodsComments: goodsComments
+        }
+
+        APP.ajax(CONFIG.apiUrl.addGoodsComment, 'POST', data, function(data){
+            alert('评论信息提交成功', null, function(e) {
+                window.location.href = "finish.html";
+            });
+        });
+    }
+</script>
+</html>

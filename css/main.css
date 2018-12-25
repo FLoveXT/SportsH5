@@ -1,0 +1,684 @@
+@charset "utf-8";
+@import url(base.css);
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.head {
+    height: 100px;
+    background: #323031;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 999;
+}
+
+.bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 46px;
+    background: #fff;
+    border-top: #e0e0e0 solid 1px;
+    z-index: 999998
+}
+
+.bottom ul {
+    display: flex;
+}
+
+.bottom ul li {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    height: 44px;
+    padding-top: 2px;
+}
+
+.bottom ul li i {
+    font-size: 24px;
+    color: #bac7d8
+}
+
+.bottom ul li p {
+    padding: 0;
+    margin: 0;
+    line-height: 14px;
+    color: #bac7d8;
+    font-size: 12px;
+    -webkit-transform: scale(0.9);
+}
+
+.bottom ul li.on i {
+    font-size: 24px;
+    color: #eb861a;
+}
+
+.bottom ul li.on p {
+    padding: 0;
+    margin: 0;
+    line-height: 14px;
+    color: #eb861a;
+}
+
+.title {
+    position: fixed;
+    background: #323031;
+    color: #fff;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 9997;
+}
+
+.title a {
+    text-decoration: none;
+    position: absolute;
+    color: #fff;
+    left: 12px;
+}
+
+.title1{position: fixed;height: 40px;left:0; right:0;}
+
+.back_icon {
+    font-size: 16px;
+}
+
+/*我的 */
+
+.set_icon {
+    color: #fff;
+    text-decoration: none;
+    right: 10px;
+}
+
+.set_icon i {
+    font-size: 22px;
+}
+
+.not_login {
+    padding-top: 40px;
+    display: none
+}
+
+.login_btn {
+    border: #fff solid 1px;
+    background: #fff;
+    width: 120px;
+    height: 30px;
+    border-radius: 15px;
+    color: #333;
+}
+
+.login_btn:hover {
+    background: #f54c63;
+}
+
+.user_head {
+    border-radius: 50%;
+}
+
+.logining {
+    color: #fff;
+    display: block;
+}
+
+.logining h1 {
+    font-size: 16px;
+    font-weight: normal
+}
+
+.logining .user_info {
+    text-decoration: none;
+    color: #fff;
+    font-weight: normal;
+    color: #dadada;
+    font-size: 12px;
+    -webkit-transform: scale(0.9);
+}
+
+.user_info i {
+    position: relative;
+    top: 1px;
+}
+
+.set_box {
+    text-align: right;
+    padding-right: 10px;
+    padding-top: 2px;
+}
+
+.account {
+    padding: 22px 10px;
+    font-size: 14px;
+    border-bottom: #efefef solid 8px;
+}
+
+.account .btn {
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    background: #323031;
+    color: #fff;
+    margin-left: 6px;
+    text-decoration: none;
+}
+
+.my_block {
+    padding: 0 10px;
+}
+
+.my_block .item {
+    height: 62px;
+    border-bottom: #f2f2f2 solid 1px;
+    line-height: 62px;
+    color: #535353;
+}
+
+.my_block .item i {
+    font-size: 22px;
+    position: relative;
+    top: 2px;
+    margin-right: 4px;
+}
+
+.my_block .item .icon-right_arrow {
+    color: #b9b9b9;
+    font-size: 14px;
+}
+
+.my_block .item a {
+    text-decoration: none
+}
+
+.my_block .color1 {
+    color: #ffb80d
+}
+
+.my_block .color2 {
+    color: #00c292
+}
+
+.my_block .color3 {
+    color: #3096f8
+}
+
+.eixt {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-bottom: #efefef solid 1px;
+}
+
+.eixt a {
+    text-decoration: none;
+    color: #535353
+}
+
+/* 大厅 */
+
+.bankuai ul {
+    display: flex;
+}
+
+.bankuai ul li {
+    flex: 1;
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+}
+
+.hotTuijian h1 {
+    background: #f5f5f5;
+    font-weight: normal;
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+.hotTuijian h1 .more {
+    text-decoration: none;
+}
+
+.hotTuijian h1 .more i {
+    color: #999;
+    font-size: 28px;
+    position: relative;
+    top: -2px;
+}
+
+.hotTuijian h1 i {
+    font-size: 20px;
+    color: #fc5455;
+}
+
+.hotTuijian .item {
+    background: #fff;
+    line-height: 26px;
+    padding: 10px;
+    margin-bottom: 6px;
+    box-shadow: 2px 2px 5px #e9e9e9;
+}
+
+.hotTuijian .time{color: #a7a7a7}
+
+.hotTuijian .item ul {
+    position: relative;
+    width: 100%;
+}
+.hotTuijian .item ul li.left{padding-left:22px;text-align: left}
+.hotTuijian .item ul li {
+    float: left;
+    width: 33%;
+    text-align: center
+}
+
+.hotTuijian .icon-vs {
+    font-size: 36px;
+    position: relative;
+    top: 16px;
+    color: #e42a2a;
+}
+
+.teamName {
+    font-weight:bold
+}
+
+/*体育*/
+
+.sport .top {
+    height: 30px;
+    background: #323031;
+    color: #fff;
+    font-size: 14px;
+    line-height: 30px;
+    padding: 0 10px;
+    position: relative;
+}
+
+.top .num {
+    color: #e6cd22;
+    margin-left: 4px;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+.top .addMoney i {
+    color: #e6cd22;
+    margin-left: 6px;
+    font-size: 20px;
+    position: absolute;
+}
+
+.sport {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+    top: 38px;
+    z-index: 9999
+}
+
+.sport .top .pull-right a {
+    text-decoration: none;
+}
+
+.sport .top .pull-right i {
+    color: #fff;
+    font-size: 18px;
+}
+
+.sportMenu {
+    height: 36px;
+    border-bottom: #ebeef0 solid 1px;
+    display: flex;
+    width: 100%
+}
+
+.sportMenu li {
+    flex: 1;
+    text-align: center;
+    line-height: 36px;
+    letter-spacing: 0.2em;
+}
+
+.sportMenu li.on {
+    color: #eb861a;
+    font-weight: bold;
+}
+
+.sportFilter {
+    height: 36px;
+    border-bottom: #ebeef0 solid 1px;
+    padding: 0 10px;
+    font-size: 16px;
+}
+
+.sportFilter .filterDate{padding-top:10px;}
+.sportFilter .filterDate input{ text-align: center;}
+
+
+.sportFilter ul li {
+    float: left;
+    line-height: 34px;
+    margin-right: 16px;
+}
+
+.sportFilter ul li.on {
+    border-bottom: #eb861a solid 2px;
+    color: #eb861a;
+}
+
+.sportFilter .teamFiter {
+    position: relative;
+    top: 8px;
+    text-decoration: none;
+    color: #eb861a;
+    z-index: 999;
+}
+
+.sportFilter .teamFiter i {
+    font-size: 20px;
+}
+
+.teamList {
+    background: #fff;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    right: 0;
+    margin-left: 118px;
+    top: 107px;
+    bottom: 80px;
+    padding-top: 6px;
+    padding: 6px 10px 6px 10px;
+}
+
+.teamList .item {
+    padding-top:6px;
+    border-bottom: #efefef solid 1px;
+    min-height: 80px;
+    overflow: auto;
+}
+
+.teamList .item li {
+    float: left;
+    width: 33%;
+    text-align: center
+}
+
+.teamList .item li img {
+    width: 26px;
+}
+
+.teamList .icon-vs {
+    font-size: 30px;
+    position: relative;
+    /* top: 10px; */
+    color: #e42a2a
+}
+
+.teamList .date {
+    color: #aaaaaa;
+    padding-bottom: 4px;
+}
+
+.teamList2 {
+    background: #fff;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    right: 0;
+    margin-left: 118px;
+    top: 107px;
+    bottom: 80px;
+    padding-top: 6px;
+    padding: 6px 10px 6px 10px;
+}
+
+.teamList2 .item {
+    padding-top:6px;
+    border-bottom: #efefef solid 1px;
+    min-height: 80px;
+    overflow: auto;
+}
+
+.teamList2 .item li {
+    float: left;
+    width: 33%;
+    text-align: center
+}
+
+.teamList2 .item li img {
+    width: 26px;
+}
+
+.teamList2 .icon-vs {
+    font-size: 30px;
+    position: relative;
+    /* top: 10px; */
+    color: #e42a2a
+}
+
+.teamList2 .date {
+    color: #aaaaaa;
+    padding-bottom: 4px;
+}
+
+.sideMenu {
+    width: 110px;
+    background: #f3f3f3;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    top: 107px;
+    bottom: 80px;
+}
+
+.sideMenu_list {
+    text-align: left;
+    font-size: 12px;
+   clear: both;
+}
+
+.sideMenu_list .item {
+    font-size: 12px;
+    height: 36px;
+    text-decoration: none;
+    color: #7f7f7f;
+    padding: 8px 8px;
+    border-bottom: #d9d9d9 solid 1px;
+    border-right: #d9d9d9 solid 1px;
+}
+
+.sideMenu_list .on {
+    background: #fff;
+    color: #ff6600;
+    border-right: #fff solid 1px;
+}
+
+.sideMenu_list .item {
+    font-size: 12px !important;
+}
+
+.sideMenu_list .item img {
+    width: 20px;
+    position: relative;
+    top: 5px;
+    margin-right: 4px;
+}
+
+.sideMenu_list .item .gameNum {
+    float: right;
+    position: relative;
+    top: 5px;
+}
+
+.sideMenu_list .item p {
+    font-size: 12px;
+}
+
+.teamList ul li {
+    float: left;
+}
+
+/* 滚动条插件样式覆盖 */
+
+.mCSB_inside>.mCSB_container {
+    margin-right: 0px;
+}
+
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    position: relative;
+    width: 2px;
+    height: 100%;
+    margin: 0 auto;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    border-radius: 16px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0)
+}
+
+.mCSB_scrollTools .mCSB_draggerContainer {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    bottom: 0;
+    right: 0;
+    height: auto;
+}
+
+.mCSB_scrollTools .mCSB_draggerRail {
+    background-color: #000;
+    background-color: rgba(0, 0, 0, 0);
+    filter: "alpha(opacity=40)";
+    -ms-filter: "alpha(opacity=40)";
+}
+
+/* 赛事筛选 */
+.filterGameList .item{clear:left;}
+.filterGameList .item h1 {
+    padding:4px 8px;
+    font-weight: none;
+}
+
+.filterGameList .item h1 span {
+    background: #cacaca;
+    display: block;
+    width: 14px;
+    padding: 2px;
+    height: 14px;
+    line-height: 14px;
+    text-align: center;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 10px;
+    -webkit-transform: scale(0.6);
+    transform: translateX(0px);
+}
+.smallL{
+    transform:scale(0.8);
+    transform-origin:0% 100%;
+    font-size: 12px;
+}
+.smallR{
+    transform:scale(0.8);
+    transform-origin:100% 100%;
+    font-size: 12px;
+}
+.smallC{
+    transform:scale(0.8);
+    transform-origin:100% 100%;
+    transform: translateY(2px);
+    font-size: 12px;
+}
+.bold{font-weight: bold;}
+.filterGameList ul{margin-left:10px;}
+
+.filterGameList ul li {
+    float: left;
+    margin: 6px 6px 6px 0;
+    padding: 4px 4px;
+    width:28%;
+    text-align: left;
+    color: rgb(158, 158, 158);
+    font-weight: normal;
+    font-size: 12px;
+    border-radius: 4px;
+    background: #dfdfdf;
+}
+
+.filterGameList ul li.on {
+    background: #4a8ad8;
+    color: #fff;
+}
+
+.filterGameList ul li span{float:right;margin-right: 4px;font: 12px;}
+
+.bottom .btn_area a{display: block;float:left;font-size:16px;width: 49%; text-align: center;line-height: 44px; text-decoration: none;}
+.gray{color: #a5a5a5}
+
+
+/* 滚球 */
+table{border-collapse:collapse;border-spacing:0;}
+.guanQiuList table tr td{font-size: 12px; line-height: 32px;padding:4px 8px;}
+.guanQiuList table tr td.on{background: #ff5722;color: #fff;}
+.guanQiuList table tr td.on .Odds{color: #fff;}
+.guanQiuList table .table_head{background: #efefef;}
+.guanQiuList table .gameName{width: 30%;}
+.guanQiuList table .gameName span{color: #ff5722;padding-left:4px;}
+.guanQiuList table .green{color: #43a047;font-weight: bold; font-family: Arial;font-size: 16px;}
+.guanQiuList table .Odds{color: #ff5722;float: right}
+.LBorder{border-left: #ebeef0 solid 1px;}
+.RBorder{border-right: #ebeef0 solid 1px;}
+.BBorder{border-bottom: #ebeef0 solid 1px;}
+
+
+.gameListBox{
+    background: #fff;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    right: 0;
+    top: 107px;
+    bottom: 80px;
+}
+
+/* 下注 */
+.xiadangLayer{position:fixed;left: 0;right: 0;height:180px; bottom:-150px; z-index: 9999999;background: #e4e4e4;display: none;}
+.xiadangLayer h1{background: #2479e2;height: 40px; line-height: 36px;padding:0 10px;}
+
+.xiadangLayer h1 a{color: #fff; text-decoration: none;margin-left: 20px;}
+.xiadangLayer .btn_area{background: #fff;height:40px;}
+.xiadangLayer .btn_area input{margin-left: 10px;height: 38px;}
+
+.xiadangLayer .tz_info{height: 100px;padding:0 20px;overflow: hidden}
+
+.xiadangLayer .red{color: #ff6600}
+
+.xiadangLayer .touzhu_btn{background: #ff6600;color: #fff; line-height: 40px;padding:0 30px;text-decoration: none;}
+
+/* 赛果 */
+.saiguo{color: #333;}
+.saiguo .R{text-align: right}
+.saiguo .L{text-align:left}
+.saiguo .C{text-align: center;}
+.saiguo .gray{color: #b1b1b1}
+.saiguo .orange{color: #ff5b06}
+.saiguo .red{color: #ff0000;}
+.saiguo .date{margin-left: 6px;}
+.saiguo .color1{color: #997ada}
+.saiguo .color2{color: #63b4a1}
+.saiguo .color3{color: #9c9f30}
+.saiguo .color3{color: #997ada}
+.item_bg{background:url("../images/bg_line.png") repeat-x;border-bottom: #f2f2f2 solid 1px;padding:12px 0}
+
+
+
+

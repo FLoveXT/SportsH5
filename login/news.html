@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>消息</title>
+    <meta name="keywords" content="">
+    <link href="../css/iconfont.css" rel="stylesheet">
+    <link href="../css/login.css" rel="stylesheet">
+    <link href="../js/minirefresh/minirefresh.min.css" rel="stylesheet">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../js/minirefresh/minirefresh.min.js"></script>
+    <script src="../js/common.js"></script>
+    <style>
+            body {
+                background: #f5f5f5;
+            }
+    
+            .list {
+                padding: 10px;
+                background: #fff;
+                min-height: 40px;
+                border-bottom: #efefef solid 1px;
+                margin-bottom: 0px;
+            }
+    
+            .newsItem {
+                padding: 10px;
+                background: #fff;
+                min-height: 40px;
+            }
+    
+            .list h1 {
+                color: #2e2e2e;
+                line-height: 32px;
+                font-weight: normal;
+            }
+    
+            .list h1 span {
+                font-weight: normal;
+                font-size: 12px;
+            }
+    
+            .intro {
+                padding-right: 20px;
+                color: #838383
+            }
+    
+            .detail_btn {
+                position: absolute;
+                right: 6px;
+                top: -20px;
+            }
+    
+            .userinfo_menu {
+                margin-bottom: 6px;
+            }
+    
+            .head {
+                position: fixed;
+                left: 0;
+                right: 0;
+                top: 36px;
+                z-index: 999;
+            }
+    
+		    .minirefresh-wrap {
+		    	top: 83px;
+		    }
+    </style>
+    <script>
+    var ROWS = 10;
+	var NoticePage = 0;
+    	$(document).ready(function (e) {
+
+            $(".userinfo_menu li").click(function () {
+                var index = $(".userinfo_menu li").index(this);
+                $(".userinfo_menu li").removeClass("on");
+                $(this).addClass("on");
+                $(".infoType").hide();
+                $(".infoType").eq(index).show();
+                if(index == 0){
+                	$("#pageBar1").show();
+                	$("#pageBar2").hide();
+                } else if(index == 1){
+                	$("#pageBar1").hide();
+                	$("#pageBar2").show();
+                }
+            });
+            
+            //getGameNoticeList(1, ROWS);
+            //getNewMessageList(1, ROWS);
+            
+            
+            var gameNoticeRefresh = new MiniRefresh({
+        		container: '#sportNewsList',
+        		down: {
+        			isLock: false,//是否禁用下拉刷新
+        			offset: 5,
+        			callback: function () {
+        				getGameNoticeList('down');
+        			}
+        		},
+        		up: {
+        			isAuto: true,
+        			callback: function () {
+        				getGameNoticeList('up');
+        			}
+        		}
+        	});
+            
+            function getGameNoticeList(downOrUp) {
+        		if (downOrUp == 'down') {
+        			NoticePage = 1;// 下拉刷新页码设置
+        	    } else {
+        	    	NoticePage++;// 上拉加载递增页码
+        	    }
+        		
+        		$.ajax({
+        			type : "GET",
+        			url : BaseUrl + "message/getGameNoticeList/" + NoticePage + "/" + ROWS,
+        			dataType : "json",
+        			success: function(result){
+        				if(result.code == SUCCESS_CODE) {
+        					var data = result.result;
+        					var count = data.totalSize;
+        					var html = "";
+        					if(data.gameNoticeVoList && data.gameNoticeVoList.length > 0) {
+        						$.each(data.gameNoticeVoList, function(i, gameNotice) {
+        							html += '<div class="list">';
+        							html += '<h1>' + gameNotice.createName + '<span class="pull-right">' + gameNotice.createDate.replace(/-/g, "/") + '</span></h1>';
+        							html += '<div class="intro">' + gameNotice.content + '</div>';
+        							html += '</div>';
+        						})
+        						
+        						if(downOrUp == 'down') {
+        							$("#sportNewsListContent").html('');
+        							$("#sportNewsListContent").append(html);      // DOM 插入数据
+        							gameNoticeRefresh.endDownLoading(true);// 结束下拉刷新
+        						} else {
+        							$("#sportNewsListContent").append(html);
+        							if((count / ROWS) <= NoticePage) {       // 是否已取完数据页
+        								gameNoticeRefresh.endUpLoading(true);// 结束上拉加载
+        							} else {
+        								gameNoticeRefresh.endUpLoading(false);
+        								gameNoticeRefresh.endDownLoading(false);//结束下拉刷新
+        							}
+        						}
+        					} else {
+        						if (downOrUp == 'down') {
+        							$("#sportNewsListContent").html(html);
+        							gameNoticeRefresh.endDownLoading(true);
+        						}
+        						else {
+        							gameNoticeRefresh.endUpLoading(true);
+        						}
+        					}
+        					
+        				}
+        				else if(result.code == UNLOGIN) {
+        					unLogin();
+        				}
+        				else {
+        					alert(result.msg);
+        				}
+        			},
+        			error: function() {
+        				if (downOrUp == 'down') {
+        					$("#sportNewsListContent").html('');
+        					gameNoticeRefresh.endDownLoading(true);
+        				}
+        				else {
+        					gameNoticeRefresh.endUpLoading(true);
+        				}
+        			}
+        		});
+            }
+            
+            /*个人消息 */
+            var personNoticepage = 0;
+            var personNoticeRefresh = new MiniRefresh({
+        		container: '#newMessageList',
+        		down: {
+        			isLock: false,//是否禁用下拉刷新
+        			offset: 5,
+        			callback: function () {
+        				personNoticeList('down');
+        			}
+        		},
+        		up: {
+        			isAuto: true,
+        			callback: function () {
+        				personNoticeList('up');
+        			}
+        		}
+        	});
+            
+            function personNoticeList(downOrUp) {
+        		if (downOrUp == 'down') {
+        			personNoticepage = 1;// 下拉刷新页码设置
+        	    } else {
+        	    	personNoticepage++;// 上拉加载递增页码
+        	    }
+        		
+        		$.ajax({
+        			type : "GET",
+        			url : BaseUrl + "message/getNewMessageList/" + personNoticepage + "/" + ROWS,
+        			dataType : "json",
+        			success: function(result){
+        				if(result.code == SUCCESS_CODE) {
+        					var data = result.result;
+        					var count = data.totalSize;
+        					var html = "";
+        					if(data.gameNoticeVoList && data.gameNoticeVoList.length > 0) {
+        						$.each(data.gameNoticeVoList, function(i, gameNotice) {
+        							html += '<div class="list">';
+    								html += '<h1>' + gameNotice.createName + '<span class="pull-right">' + gameNotice.createDate.replace(/-/g, "/") + '</span></h1>';
+    								html += '<div class="intro">' + gameNotice.content + '</div>';
+    								html += '</div>';
+        						})
+        						
+        						if(downOrUp == 'down') {
+        							$("#newMessageListContent").html('');
+        							$("#newMessageListContent").append(html);      // DOM 插入数据
+        							personNoticeRefresh.endDownLoading(true);// 结束下拉刷新
+        						} else {
+        							$("#newMessageListContent").append(html);
+        							if((count / ROWS) <= personNoticepage) {       // 是否已取完数据页
+        								personNoticeRefresh.endUpLoading(true);// 结束上拉加载
+        							} else {
+        								personNoticeRefresh.endUpLoading(false);
+        								personNoticeRefresh.endDownLoading(false);//结束下拉刷新
+        							}
+        						}
+        					} else {
+        						if (downOrUp == 'down') {
+        							$("#newMessageListContent").html(html);
+        							personNoticeRefresh.endDownLoading(true);
+        						}
+        						else {
+        							personNoticeRefresh.endUpLoading(true);
+        						}
+        					}
+        					
+        				}
+        				else if(result.code == UNLOGIN) {
+        					unLogin();
+        				}
+        				else {
+        					alert(result.msg);
+        				}
+        			},
+        			error: function() {
+        				if (downOrUp == 'down') {
+        					$("#newMessageListContent").html('');
+        					personNoticeRefresh.endDownLoading(true);
+        				}
+        				else {
+        					personNoticeRefresh.endUpLoading(true);
+        				}
+        			}
+        		});
+            }
+            
+            
+            
+        });
+    	
+    	
+		
+		/*function getGameNoticeList(page, rows){
+			$.ajax({
+				type : "GET",
+				url : BaseUrl + "message/getGameNoticeList/" + page + "/" + rows,
+				dataType : "json",
+				success : function(result) {
+					if (result.code == SUCCESS_CODE) {
+						var data =  result.result;
+						var totalSize = data.totalSize;
+						
+						var totalPage = parseInt((totalSize + (ROWS - 1))/ROWS);
+						$("#currentPage1").html(page + "/" + totalPage);
+						
+						$(".enableColor").off("click")
+						if(page > 1){
+							$("#firstPage1").addClass("enableColor");
+							$("#upPage1").addClass("enableColor");
+						} else {
+							$("#firstPage1").removeClass("enableColor");
+							$("#upPage1").removeClass("enableColor");
+						}
+						if(totalPage > 1 && totalPage != page){
+							$("#nextPage1").addClass("enableColor");
+							$("#endPage1").addClass("enableColor");
+						}else{
+							$("#nextPage1").removeClass("enableColor");
+							$("#endPage1").removeClass("enableColor");
+						}
+						
+						$(".enableColor").on("click", function(){
+							var id= $(this).attr("id");
+							if(id == "firstPage1"){
+								getGameNoticeList(1, ROWS);
+							} else if(id == "upPage1"){
+								getGameNoticeList(page - 1, ROWS);
+							} else if(id == "nextPage1"){
+								getGameNoticeList(page + 1, ROWS);
+							} else if(id == "endPage1"){
+								getGameNoticeList(totalPage, ROWS);
+							}
+						})
+						
+						
+						var gameNoticeVoList = data.gameNoticeVoList;
+						var html = "";
+						if(gameNoticeVoList && gameNoticeVoList.length > 0){
+							$.each(gameNoticeVoList, function(i, gameNotice){
+								html += '<div class="list">';
+								html += '<h1>' + gameNotice.createName + '<span class="pull-right">' + gameNotice.createDate.replace(/-/g, "/") + '</span></h1>';
+								html += '<div class="intro">' + gameNotice.content + '</div>';
+								html += '</div>';
+							})
+						} else {
+							html += '<div class="list">暂时没有数据！</div>';
+						}
+						
+						$("#sportNewsList").html(html);
+					} else if(result.code == UNLOGIN){
+						unLogin();
+					} else {
+						alert(result.msg);
+					}
+				}
+			});
+		}
+		
+		function getNewMessageList(page, rows){
+			$.ajax({
+				type : "GET",
+				url : BaseUrl + "message/getNewMessageList/" + getStorageUser().id + "/" + page + "/" + rows,
+				dataType : "json",
+				success : function(result) {
+					if (result.code == SUCCESS_CODE) {
+						var data =  result.result;
+						var totalSize = data.totalSize;
+						
+						var totalPage = parseInt((totalSize + (ROWS - 1))/ROWS);
+						$("#currentPage2").html(page + "/" + totalPage);
+						
+						$(".enableColor2").off("click")
+						if(page > 1){
+							$("#firstPage2").addClass("enableColor2");
+							$("#upPage2").addClass("enableColor2");
+						} else {
+							$("#firstPage2").removeClass("enableColor2");
+							$("#upPage2").removeClass("enableColor2");
+						}
+						if(totalPage > 1 && totalPage != page){
+							$("#nextPage2").addClass("enableColor2");
+							$("#endPage2").addClass("enableColor2");
+						}else{
+							$("#nextPage2").removeClass("enableColor2");
+							$("#endPage2").removeClass("enableColor2");
+						}
+						
+						$(".enableColor2").on("click", function(){
+							var id= $(this).attr("id");
+							if(id == "firstPage2"){
+								getNewMessageList(1, ROWS);
+							} else if(id == "upPage2"){
+								getNewMessageList(page - 1, ROWS);
+							} else if(id == "nextPage2"){
+								getNewMessageList(page + 1, ROWS);
+							} else if(id == "endPage2"){
+								getNewMessageList(totalPage, ROWS);
+							}
+						})
+						
+						
+						var gameNoticeVoList = data.gameNoticeVoList;
+						var html = "";
+						if(gameNoticeVoList && gameNoticeVoList.length > 0){
+							$.each(gameNoticeVoList, function(i, gameNotice){
+								html += '<div class="list">';
+								html += '<h1>' + gameNotice.createName + '<span class="pull-right">' + gameNotice.createDate.replace(/-/g, "/") + '</span></h1>';
+								html += '<div class="intro">' + gameNotice.content + '</div>';
+								html += '</div>';
+							})
+						} else {
+							html += '<div class="list">暂时没有数据！</div>';
+						}
+						
+						$("#newMessageList").html(html);
+					} else if(result.code == UNLOGIN){
+						unLogin();
+					} else {
+						alert(result.msg);
+					}
+				}
+			});
+		}*/
+
+    </script>
+
+    
+
+
+</head>
+
+<body>
+    <div class="title">
+        <a href="../my.html" class="pull-left">
+            <i class="iconfont icon-left_arrow back_icon"></i>
+        </a>消息</div>
+
+    <div class="head">
+        <ul class="userinfo_menu">
+            <li class="on">公告消息</li>
+            <li>个人消息</li>
+        </ul>
+    </div>
+    <div style="height:88px;"></div>
+
+
+    <!-- 公告消息  -->
+    <div id="sportNewsList" class="minirefresh-wrap infoType">
+		<div class="minirefresh-scroll">
+			<div  id="sportNewsListContent"></div>
+		
+		</div>
+    </div>
+
+    <!-- 个人消息     -->
+    <div id="newMessageList" class="infoType minirefresh-wrap" style="display: none;">
+    	<div class="minirefresh-scroll">
+    		<div id="newMessageListContent"></div>
+    	</div>
+    </div>
+    
+        <div style="height:60px;"></div>
+
+
+</body>
+
+</html>

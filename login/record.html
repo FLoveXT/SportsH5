@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>投注纪录</title>
+    <meta name="keywords" content="">
+     <link href="../css/iconfont.css" rel="stylesheet">
+    <link href="../layui/css/layui.css" rel="stylesheet">
+    <link href="../js/minirefresh/minirefresh.min.css" rel="stylesheet">
+    <link href="../css/login.css" rel="stylesheet">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    
+    <script src="../layui/layui.js"></script>
+    <script src="../js/minirefresh/minirefresh.min.js"></script>
+    <script src="../js/common.js"></script>
+
+    <script>
+	    layui.use('laydate', function(){
+	    	var laydate = layui.laydate;
+	    	
+	    	//执行一个laydate实例
+	    	laydate.render({
+	    	  elem: '#startDate', //指定元素
+	    	  //value: new Date(),
+	    	  done: function(value, date, endDate){
+	    		
+	    		}
+	    	});
+	
+	    	laydate.render({
+		    	  elem: '#endDate', //指定元素
+		    	  //value: new Date(),
+		    	  done: function(value, date, endDate){
+		    		
+		    		}
+		    	});
+	    });
+    	var ROWS = 10;
+        $(document).ready(function (e) {
+
+        	$("#search-btn").click(function(){
+        		page2 = 0;
+        		$('#listdata2').html('');
+        		miniRefresh2.triggerDownLoading();
+        	});
+        	
+            $(".userinfo_menu li").click(function () {
+                var index = $(".userinfo_menu li").index(this);
+                $(".userinfo_menu li").removeClass("on");
+                $(this).addClass("on");
+                $(".content").hide();
+                $(".content").eq(index).show();
+                if(index == 1){
+                	$("#timeSearch").show();
+                	$("#search-btn").click();
+                } else {
+                	$("#timeSearch").hide();
+                	
+                	page = 0;
+            		$('#listdata').html('');
+            		miniRefresh.triggerDownLoading();
+                }
+            })
+            
+            
+         // 初始化页码
+            var page = 0;
+            var miniRefresh = new MiniRefresh({
+                container: '#minirefresh',
+                down: {
+                	isLock: false,//是否禁用下拉刷新
+                	offset: 5,
+                	callback: function () {
+                        doAjax('down');
+                    }
+                },
+                up: {
+                    isAuto: true,
+                    callback: function () {
+                        doAjax('up');
+                    }
+                }
+            });
+
+            // 组装 ajax 分页函数。参数 downOrUp 判断是下拉刷新还是上拉加载。
+            // 特别提示：若你仅使用下拉刷新或上拉加载的其中一项，可不用组装 ajax 分页函数了，直接将 ajax 分页放在下拉刷新或上拉加载的回调 callback 里。
+            var doAjax = function (downOrUp) {
+                if (downOrUp == 'down') {
+                    page = 1;// 下拉刷新页码设置
+                } else {
+                    page++;// 上拉加载递增页码
+                }
+
+                $.ajax({
+                	url: BaseUrl + "order/getOrderListApp?timestamp=" +  (new Date()).getTime(),
+    	            type: "GET",
+    	            data: {// 请求参数，一般会带上页码
+    	                page: page,
+    	                rows: ROWS,
+    	                status: 0,
+    	            },
+    	            dataType : "json",
+                    success: function (result) {
+                        // 下面这段请根据自己的数据结构来处理
+    					if (result.code == SUCCESS_CODE) {
+    						var data =  result.result;
+    						var totalSize = data.count;
+    						if (data.orderVoList && data.orderVoList.length > 0) {
+    							var html = "";
+    							$.each(data.orderVoList, function(i, order){
+    								var betType = order.betType;
+    								var betTypeStr = ""
+    								var aStr = "";
+    								if(betType == 0){
+    									betTypeStr = "今日赛事";
+    								} else if(betType == 1){
+    									betTypeStr = "早盘";
+    								} else if(betType == 2){
+    									betTypeStr = "滚球";
+    									aStr += '<p>';
+    									if(order.scope == "1h"){
+    										aStr += "上半场:";
+    									} else if(order.scope == "ord"){
+    										aStr += "全场:";
+    									} else if(order.scope == "2h"){
+    										aStr += "下半场:";
+    									}
+    									aStr += "<i style='color:red;'>" + order.playTime + "</i>" + "  比分:<i style='color:red;'>" + order.score +"</i></p>"
+    								}
+    								
+    								html += '<div class="record_list">';
+    								html += '<div class="teamAndMoney">';
+    								html += '<p>' + order.tournamentTemplateName + '</p>';
+    								html += '<p>' + order.teamName + '<span class="vs">v</span>' + order.guestTeamName + '</p>';
+    								
+    								html += '<p class="rate">';
+    								var scope = order.scope;
+    								var type = order.type;
+    								var state = order.state;
+    								var odds = order.odds;
+    								var ouDparam = order.ouDparam;
+    								
+    								if(scope == "1h"){
+    									if(type == "1x2"){
+    										if(state == 1){
+    											html += '<span class="red">半场独赢' + order.teamName + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">半场独赢 '+order.guestTeamName+' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 3){
+    											html += '<span class="red">半场独赢 和 &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									} else if(type == "ah"){
+    										html += '<span class="red">半场让球 ';
+    										if(state == 1){
+    											html += order.teamName;
+    											if(order.ahTeam == 1){
+    												html += "-";
+    											} else if(order.ahTeam == 2){
+    												html += "+";
+    											}
+    										} else if(state == 2){
+    											html += order.guestTeamName;
+    											if(order.ahTeam == 1){
+    												html += "+";
+    											} else if(order.ahTeam == 2){
+    												html += "-";
+    											}
+    										}
+    										html += formatOdds(order.ahDparam);
+    										html += '&nbsp;&nbsp; @' + odds + '</span>';
+    									} else if(type == "ou"){
+    										if(state == 1){
+    											html += '<span class="red">半场大小 大' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">半场大小 小' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									}
+    								} else if(scope == "ord"){
+    									if(type == "1x2"){
+    										if(state == 1){
+    											html += '<span class="red">全场独赢 ' + order.teamName + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">全场独赢 '+order.guestTeamName+' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 3){
+    											html += '<span class="red">全场独赢 和 &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									} else if(type == "ah"){
+    										html += '<span class="red">全场让球 ';
+    										if(state == 1){
+    											html += order.teamName;
+    											if(order.ahTeam == 1){
+    												html += "-";
+    											} else if(order.ahTeam == 2){
+    												html += "+";
+    											}
+    										} else if(state == 2){
+    											html += order.guestTeamName;
+    											if(order.ahTeam == 1){
+    												html += "+";
+    											} else if(order.ahTeam == 2){
+    												html += "-";
+    											}
+    										}
+    										html += formatOdds(order.ahDparam);
+    										html += ' &nbsp;&nbsp;@' + odds + '</span>';
+    									} else if(type == "ou"){
+    										if(state == 1){
+    											html += '<span class="red">全场大小  大' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">全场大小 小' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									}
+    								} else if(scope == "2h"){
+    									if(type == "1x2"){
+    										if(state == 1){
+    											html += '<span class="red">下半场独赢 ' + order.teamName + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">下半场独赢 '+order.guestTeamName+' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 3){
+    											html += '<span class="red">下半场独赢 和 &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									} else if(type == "ah"){
+    										html += '<span class="red">下半场让球 ';
+    										if(state == 1){
+    											html += order.teamName;
+    											if(order.ahTeam == 1){
+    												html += "-";
+    											} else if(order.ahTeam == 2){
+    												html += "+";
+    											}
+    										} else if(state == 2){
+    											html += order.guestTeamName;
+    											if(order.ahTeam == 1){
+    												html += "+";
+    											} else if(order.ahTeam == 2){
+    												html += "-";
+    											}
+    										}
+    										html += formatOdds(order.ahDparam);
+    										html += ' &nbsp;&nbsp;@' + odds + '</span>';
+    									} else if(type == "ou"){
+    										if(state == 1){
+    											html += '<span class="red">下半场大小  大' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">下半场大小 小' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									}
+    								}
+    								/* html += '<p class="rate">爱沙尼亚U19@';
+    								html += '<span>' + order.odds + '</span>'; */
+    								html += '</p>';
+    								html += aStr;
+    								html += '<p class="money pb6">投注金额';
+    								html += '<span>' + formatterDouble(order.betCount) + '</span>';
+    								html += '</p>';
+    								html += '</div>';
+    								html += '<div class="result">';
+    								html += '<p>' + betTypeStr + '</p>';
+    								if(order.status == 6){
+    									html += '<p class="pt12 state ongoing">确认中</p>';
+    								} else {
+	    								html += '<p class="pt12 state ongoing">未结算</p>';
+    								}
+    								if(order.resultScore)
+    									html += '<p class="pt12 state ongoing" style="color: red;">' + order.resultScore + '</p>';
+    		                        html += '<p class="pt12 win">可赢：' + formatterDouble(order.winCount) + '</p>';
+    		                        html += '</div>';
+    		                        html += '<div class="codeAndDate clear_it">';
+    		                        html += '<div class="code">订单编号：' + order.orderNo + '</div>';
+    		                        html += '<div class="date">' + order.createTime + '</div>';
+    		                        html += '</div>';
+    		                        html += '</div>';
+    							})
+    							
+    							if (downOrUp == 'down') {
+    								$('#listdata').html('');
+                                    $('#listdata').append(html);// DOM 插入数据
+                                    miniRefresh.endDownLoading(true);// 结束下拉刷新
+                                } else {
+                                	$('#listdata').append(html);
+                                    if ((totalSize/ROWS) <= page) {// 是否已取完数据页
+                                        miniRefresh.endUpLoading(true);// 结束上拉加载
+                                    } else {
+                                        miniRefresh.endUpLoading(false);
+                                        miniRefresh.endDownLoading(false);// 结束下拉刷新
+                                    }
+                                }
+    	                    } else {
+    	                        if (downOrUp == 'down') {
+    	                            $('#listdata').html('');
+    	                            miniRefresh.endDownLoading(true);
+    	                        } else {
+    	                            miniRefresh.endUpLoading(true);
+    	                        }
+    	                    }
+    					} else if(result.code == UNLOGIN){
+    						unLogin();
+    					} else {
+    						alert(result.msg)
+    					}
+                    },
+                    error: function () {
+                        if (downOrUp == 'down') {
+                            $('#listdata').html('');
+                            miniRefresh.endDownLoading(true);
+                        } else {
+                            miniRefresh.endUpLoading(true);
+                        }
+                    }
+                });
+            };
+            
+            var page2 = 0;
+            var miniRefresh2 = new MiniRefresh({
+                container: '#minirefresh2',
+                down: {
+                	isLock: false,//是否禁用下拉刷新
+                	offset: 5,
+                	callback: function () {
+                        doAjax2('down');
+                    }
+                },
+                up: {
+                    isAuto: true,
+                    callback: function () {
+                        doAjax2('up');
+                    }
+                }
+            });
+
+            // 组装 ajax 分页函数。参数 downOrUp 判断是下拉刷新还是上拉加载。
+            // 特别提示：若你仅使用下拉刷新或上拉加载的其中一项，可不用组装 ajax 分页函数了，直接将 ajax 分页放在下拉刷新或上拉加载的回调 callback 里。
+            var doAjax2 = function (downOrUp) {
+                if (downOrUp == 'down') {
+                    page2 = 1;// 下拉刷新页码设置
+                } else {
+                    page2++;// 上拉加载递增页码
+                }
+
+                var reqData = {// 请求参数，一般会带上页码
+    	                page: page2,
+    	                rows: ROWS,
+    	                status: -11,
+    	            };
+                reqData.startDate = $("#startDate").val();
+                var endTime = $("#endDate").val();
+                if(endTime){
+                	endTime += " 23:59:59";
+                }
+                reqData.endDate = endTime;
+                $.ajax({
+                	url: BaseUrl + "order/getOrderListApp?timestamp=" +  (new Date()).getTime(),
+    	            type: "GET",
+    	            data: reqData,
+    	            dataType : "json",
+                    success: function (result) {
+                        // 下面这段请根据自己的数据结构来处理
+    					if (result.code == SUCCESS_CODE) {
+    						var data =  result.result;
+    						var totalSize = data.count;
+    						if (data.orderVoList && data.orderVoList.length > 0) {
+    							var html = "";
+    							$.each(data.orderVoList, function(i, order){
+    								var betType = order.betType;
+    								var betTypeStr = ""
+    								var aStr = "";
+    								if(betType == 0){
+    									betTypeStr = "今日赛事";
+    								} else if(betType == 1){
+    									betTypeStr = "早盘";
+    								} else if(betType == 2){
+    									betTypeStr = "滚球";
+    									aStr += '<p>';
+    									if(order.scope == "1h"){
+    										aStr += "上半场:";
+    									} else if(order.scope == "ord"){
+    										aStr += "全场:";
+    									} else if(order.scope == "2h"){
+    										aStr += "下半场:";
+    									}
+    									aStr += "<i style='color:red;'>" + order.playTime + "</i>" + "  比分:<i style='color:red;'>" + order.score +"</i></p>"
+    								}
+    								
+    								html += '<div class="record_list">';
+    								html += '<div class="teamAndMoney">';
+    								html += '<p>' + order.tournamentTemplateName + '</p>';
+    								html += '<p>' + order.teamName;
+    								html += '<span class="vs">v</span>' + order.guestTeamName + '</p>';
+    								
+    								html += '<p class="rate">';
+    								var scope = order.scope;
+    								var type = order.type;
+    								var state = order.state;
+    								var odds = order.odds;
+    								var ouDparam = order.ouDparam;
+    								
+    								if(scope == "1h"){
+    									if(type == "1x2"){
+    										if(state == 1){
+    											html += '<span class="red">半场独赢' + order.teamName + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">半场独赢 '+order.guestTeamName+' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 3){
+    											html += '<span class="red">半场独赢 和 &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									} else if(type == "ah"){
+    										html += '<span class="red">半场让球 ';
+    										if(state == 1){
+    											html += order.teamName;
+    											if(order.ahTeam == 1){
+    												html += "-";
+    											} else if(order.ahTeam == 2){
+    												html += "+";
+    											}
+    										} else if(state == 2){
+    											html += order.guestTeamName;
+    											if(order.ahTeam == 1){
+    												html += "+";
+    											} else if(order.ahTeam == 2){
+    												html += "-";
+    											}
+    										}
+    										html += formatOdds(order.ahDparam);
+    										html += '&nbsp;&nbsp; @' + odds + '</span>';
+    									} else if(type == "ou"){
+    										if(state == 1){
+    											html += '<span class="red">半场大小 大' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">半场大小 小' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									}
+    								} else if(scope == "ord"){
+    									if(type == "1x2"){
+    										if(state == 1){
+    											html += '<span class="red">全场独赢 ' + order.teamName + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">全场独赢 '+order.guestTeamName+' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 3){
+    											html += '<span class="red">全场独赢 和 &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									} else if(type == "ah"){
+    										html += '<span class="red">全场让球 ';
+    										if(state == 1){
+    											html += order.teamName;
+    											if(order.ahTeam == 1){
+    												html += "-";
+    											} else if(order.ahTeam == 2){
+    												html += "+";
+    											}
+    										} else if(state == 2){
+    											html += order.guestTeamName;
+    											if(order.ahTeam == 1){
+    												html += "+";
+    											} else if(order.ahTeam == 2){
+    												html += "-";
+    											}
+    										}
+    										html += formatOdds(order.ahDparam);
+    										html += ' &nbsp;&nbsp;@' + odds + '</span>';
+    									} else if(type == "ou"){
+    										if(state == 1){
+    											html += '<span class="red">全场大小  大' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">全场大小 小' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									}
+    								} else if(scope == "2h"){
+    									if(type == "1x2"){
+    										if(state == 1){
+    											html += '<span class="red">下半场独赢 ' + order.teamName + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">下半场独赢 '+order.guestTeamName+' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 3){
+    											html += '<span class="red">下半场独赢 和 &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									} else if(type == "ah"){
+    										html += '<span class="red">下半场让球 ';
+    										if(state == 1){
+    											html += order.teamName;
+    											if(order.ahTeam == 1){
+    												html += "-";
+    											} else if(order.ahTeam == 2){
+    												html += "+";
+    											}
+    										} else if(state == 2){
+    											html += order.guestTeamName;
+    											if(order.ahTeam == 1){
+    												html += "+";
+    											} else if(order.ahTeam == 2){
+    												html += "-";
+    											}
+    										}
+    										html += formatOdds(order.ahDparam);
+    										html += ' &nbsp;&nbsp;@' + odds + '</span>';
+    									} else if(type == "ou"){
+    										if(state == 1){
+    											html += '<span class="red">下半场大小  大' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										} else if(state == 2){
+    											html += '<span class="red">下半场大小 小' + formatOdds(ouDparam) + ' &nbsp;&nbsp;@' + odds + '</span>';
+    										}
+    									}
+    								}
+    								
+    								html += '</p>';
+    								html += aStr;
+    								html += '<p class="money pb6">投注金额';
+    								html += '<span>' + formatterDouble(order.betCount) + '</span>';
+    								html += '</p>';
+    								html += '</div>';
+    								html += '<div class="result">';
+    								html += '<p>' + betTypeStr + '</p>';
+    								html += '<p class="pt12 finished">';
+    								html += ORDER_STATUS[order.status]
+    								html += '</p>';
+    								if(order.resultScore)
+    									html += '<p class="pt12 state ongoing" style="color: red;">' + order.resultScore + '</p>';
+    								html += '<p class="pt12 win_yes">';
+    								html += formatterDouble(order.reusltCount) + '</p>';
+    								html += '</div>';
+    								html += '<div class="codeAndDate clear_it">';
+    								html += '<div class="code">订单编号：' + order.orderNo + '</div>';
+     		                        html += '<div class="date">' + order.createTime + '</div>';
+    								html += '</div>';
+    								html += '</div>';
+    							})
+    							
+    							if (downOrUp == 'down') {
+    								$('#listdata2').html('');
+                                    $('#listdata2').append(html);// DOM 插入数据
+                                    miniRefresh2.endDownLoading(true);// 结束下拉刷新
+                                } else {
+                                	$('#listdata2').append(html);
+                                    if ((totalSize/ROWS) <= page2) {// 是否已取完数据页
+                                        miniRefresh2.endUpLoading(true);// 结束上拉加载
+                                    } else {
+                                        miniRefresh2.endUpLoading(false);
+                                        miniRefresh2.endDownLoading(false);// 结束下拉刷新
+                                    }
+                                }
+    	                    } else {
+    	                        if (downOrUp == 'down') {
+    	                            $('#listdata2').html('');
+    	                            miniRefresh2.endDownLoading(true);
+    	                        } else {
+    	                            miniRefresh2.endUpLoading(true);
+    	                        }
+    	                    }
+    					} else if(result.code == UNLOGIN){
+    						unLogin();
+    					} else {
+    						alert(result.msg)
+    					}
+                    },
+                    error: function () {
+                        if (downOrUp == 'down') {
+                            $('#listdata2').html('');
+                            miniRefresh2.endDownLoading(true);
+                        } else {
+                            miniRefresh2.endUpLoading(true);
+                        }
+                    }
+                });
+            };
+            
+        });
+        
+
+        function formatOdds(odds){
+        	var odds = odds.toString();
+        	if(odds.indexOf(".25") > -1){
+        		var a = odds.substring(0, odds.indexOf("."));
+        		return a + "/" + (a + ".5");
+        	} else if(odds.indexOf(".75") > -1){
+        		var a = odds.substring(0, odds.indexOf("."));
+        		return (a + ".5") + "/" + (parseInt(a) + 1);
+        	}else {
+        		return odds;
+        	}
+        }
+
+    </script>
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        table tr td {
+            padding: 0;
+        }
+
+        .userinfo_menu {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 40px;
+            z-index: 999
+        }
+       
+    </style>
+
+</head>
+
+<body>
+    <div class="title">
+        <a href="javascript:history.go(-1)" class="pull-left">
+            <i class="iconfont icon-left_arrow back_icon"></i>
+        </a>投注记录</div>
+    <div style="height:50px;"></div>
+    <div class="head">
+        <ul class="userinfo_menu">
+            <li class="on">未结算</li>
+            <li>已结算</li>
+        </ul>
+        <div id="timeSearch" class="search" style="margin-top: 46px; background-color: #f5f5f5; display: none;">
+                    从
+                    <input type="text"  id="startDate" autocomplete="off" class="date">
+                     至
+                    <input type="text"  id="endDate" autocomplete="off" class="date">
+                    <a id='search-btn' href="#" class="searcBtn" style="background-color: #009688;">查询</a>
+            </div>
+    </div>
+    <div style="height:40px;"></div>
+
+    <!--未结算-->
+    <div class="content" style="display:block"> 
+    	<div id="minirefresh" class="minirefresh-wrap">
+		    <div class="minirefresh-scroll" style="margin-top: 90px;"> 
+		    	<div id="listdata"></div>
+		    </div>
+		</div>
+    </div>
+
+    <!--已结算-->
+    <div class="content" style="display:none">
+            
+            <div id="minirefresh2" class="minirefresh-wrap">
+			    <div class="minirefresh-scroll" style="margin-top: 142px;"> 
+			    	<div id="listdata2"></div>
+			    </div>
+			</div>
+    </div>
+
+
+
+
+
+
+</body>
+
+</html>

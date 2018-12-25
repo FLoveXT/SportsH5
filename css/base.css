@@ -1,0 +1,286 @@
+body {
+    font-family: "微软雅黑",Arial
+}
+
+* {
+    font-size: 14px;
+}
+
+input {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    -webkit-appearance: none;
+    outline: none;
+    border: none;
+}
+
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button {
+    -webkit-appearance: none;
+    /*去掉苹果的默认UI来渲染按钮*/
+}
+
+.floatL {
+    float: left;
+}
+
+.floatR {
+    float: right;
+}
+
+.clear_fix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+
+.clear_fix {
+    zoom: 1;
+}
+
+.clear_it {
+    clear: both;
+    overflow: hidden;
+}
+
+div,
+p,
+h1,
+h2,
+h3,
+h4 {
+    margin: 0;
+    padding: 0;
+}
+
+ul,
+li {
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+
+textarea {
+    margin: 0;
+    padding: 0;
+}
+
+a.red {
+    color: #aa0000;
+}
+
+a.red:hover {
+    text-decoration: underline;
+    color: #aa0000;
+}
+
+a.blue {
+    color: #1f8ccd;
+}
+
+.red {
+    color: #aa0000;
+}
+
+.yellow {
+    color: #ffc000;
+}
+
+.green {
+    color: #008000;
+}
+
+.pt4 {
+    padding-top: 4px;
+}
+
+.pt6 {
+    padding-top: 6px;
+}
+
+.pt8 {
+    padding-top: 8px;
+}
+
+.pt10 {
+    padding-top: 10px;
+}
+
+.pt12 {
+    padding-top: 12px;
+}
+
+.pt14 {
+    padding-top: 14px;
+}
+
+.pt16 {
+    padding-top: 16px;
+}
+
+.pt20 {
+    padding-top: 20px;
+}
+
+.pt24 {
+    padding-top: 24px;
+}
+
+.pt30 {
+    padding-top: 30px;
+}
+
+.pt40 {
+    padding-top: 40px;
+}
+
+.pt50 {
+    padding-top: 50px;
+}
+.pb6 {
+    padding-bottom: 6px;
+}
+.pb20 {
+    padding-bottom: 20px;
+}
+
+.mt4 {
+    margin-top: 4px;
+}
+
+.mt6 {
+    margin-top: 6px;
+}
+
+.mt8 {
+    margin-top: 8px;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.mt14 {
+    margin-top: 14px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mt26 {
+    margin-top: 26px;
+}
+
+.mt30 {
+    margin-top: 30px;
+}
+
+.mt35 {
+    margin-top: 35px;
+}
+
+.font10 {
+    font-size: 10px;
+}
+
+.font12 {
+    font-size: 12px;
+}
+
+.font14 {
+    font-size: 14px;
+}
+
+.font16 {
+    font-size: 16px;
+}
+
+.font18 {
+    font-size: 18px;
+}
+
+.font20 {
+    font-size: 20px;
+}
+
+.font30 {
+    font-size: 30px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.pull-left {
+    float: left !important;
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.title {
+    position:fixed;
+    background: #2479e3;
+    color: #fff;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    border-bottom: #f1f1f1 solid 2px;
+    left:0;right: 0;
+    top:0;
+}
+
+.title a {
+    text-decoration: none;
+    position: absolute;
+    color: #fff;
+    left: 12px;
+}
+
+.back_icon {
+    font-size: 16px;
+}
+
+.title a.fabu {
+    color: #fc2d57;
+    position: absolute;
+    right: -240px;
+}
+
+.title a.cancle {
+    left: 14px;
+}
+
+input::-webkit-input-placeholder {
+    color: #c3c3c3;
+}
+
+input::-moz-placeholder {
+    color: #c3c3c3;
+}
+
+input:-ms-input-placeholder {
+    color: #c3c3c3;
+}
+
+textarea::-moz-placeholder {
+    color: #c3c3c3;
+}
+
+textarea:-ms-input-placeholder {
+    color: #c3c3c3;
+}

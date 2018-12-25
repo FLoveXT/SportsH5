@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">			
+<title>在线客服</title>
+
+<link href="css/main.css" rel="stylesheet">
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/common.js"></script>
+<style>
+	body {  
+        margin-left: 0px;  
+        margin-top: 0px;  
+        margin-right: 0px;  
+        margin-bottom: 0px;  
+        overflow: hidden;  
+    } 
+    #chat {
+		position: fixed;
+		top: 0;
+		left: 0;
+		padding-left: 10px;
+		height: 40px;
+		line-height: 40px;
+    }
+    #chat img {
+    	vertical-align: middle;
+    }
+</style>
+<script type="text/javascript">
+$(function(){
+
+	var height = window.screen.availHeight - 47;
+	var width = window.screen.availWidth;
+
+	$('#iframe_1').height(height);
+	$('#iframe_1').width(width);
+
+})
+</script>
+</head>
+<body>
+	<iframe id="iframe_1" src="https://ssl.pop800.com/chat/358084" scrolling="no" frameborder="0">
+		
+	</iframe>
+	<div id="chat">
+		<a href="javascript:history.go(-1);">
+			<img src="images/button_back.png" alt="">
+		</a>
+	</div>
+</body>
+</html>

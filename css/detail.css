@@ -1,0 +1,188 @@
+@charset "utf-8";
+
+/* 投注页面 */
+body {
+    margin: 0;
+    padding: 0;
+}
+a{
+    text-decoration: none;
+}
+.head_logo {
+    background-color: #323031;
+    width: 100%;
+    height: 1rem;
+    line-height: 1rem;
+}
+.head_left {
+    float: left;
+}
+.head_right {
+    float: right;
+}
+.head_right .describe {
+    margin-right: 0.1rem;
+    float: left;
+    color: #bcbabb;
+    font-size: 0.24rem;
+}
+.head_right .record_icon {
+    border: 0.1rem solid #f49904;
+    border-radius: 50%;
+    background-color: #f49904;
+    color: #fff;
+    margin-right: 0.15rem;
+    margin-top: 0.25rem;
+    float: right;
+    width: 0.3rem;
+    height: 0.3rem;
+    line-height: 0.3rem;
+    text-align: center;
+    font-size: 0.18rem;
+}
+.head_left a {
+    margin: 0 0.2rem;
+}
+.head_left a img {
+    width: 0.18rem;
+    height: 0.38rem;
+}
+.head_left span img {
+    width: 2.09rem;
+    height: 0.82rem;
+}
+.head_left span img, .head_left a img {
+    vertical-align: middle;
+}
+.content {
+    background: url('../images/backgroup.jpg');
+    height: 0.83rem;
+    line-height: 0.83rem;
+    padding-left: 0.15rem;
+}
+.content .title_team {
+    color: #bcbabb;
+    height: 0.415rem;
+    line-height: 0.415rem;
+    font-size: 0.26rem;
+}
+.content .title_time {
+    color: #bcbabb;
+    height: 0.415rem;
+    line-height: 0.415rem;
+    font-size: 0.24rem;
+}
+.drop_panel {
+    background-color: #4b4b4b;
+    height: 0.85rem;
+    line-height: 0.85rem;
+}
+.drop_panel .drop_icon {
+    margin: 0 10px 0 15px;
+}
+.drop_panel .drop_icon img {
+    width: 0.3rem;
+    height: 0.17rem;
+    vertical-align: middle;
+}
+.drop_panel .drop_title {
+    font-size: 0.3rem;
+    color: #bcbabb;
+}
+.win li, .let_ball li, .halflet_ball li {
+    height: 1.1rem;
+    line-height: 1.1rem;
+    background-color: #fff;
+    border-bottom: 1px solid #8c8c8c;
+    overflow: hidden;
+}
+.win li .win_left, .let_ball li .let_ball_left, .halflet_ball li .halflet_ball_left {
+    float: left;
+    font-size: 0.3rem;
+    text-indent: 0.2rem;
+    color: #3c3c3c;
+}
+.win li .win_right, .let_ball li .let_ball_right, .halflet_ball li .halflet_ball_right {
+    float: right;
+    padding-right: 0.2rem;
+}
+.win li .win_right span, .let_ball li .let_ball_right .span_right, .halflet_ball li .halflet_ball_right .halflet_span_right {
+    border: 2px solid #e3e3e3;
+    display: inline-block;
+    width: 0.85rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    text-align: center;
+    font-size: 0.28rem;
+}
+.let_ball li .let_ball_right .span_left, .halflet_ball li .halflet_ball_right .halflet_span_left {
+    color: red;
+    font-size: 0.28rem;
+    padding-right: 0.05rem;
+}
+.full {
+    width: 100%;
+}
+.full tr td {
+    width: 50%;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    background-color: #fff;
+    border-bottom: 1px solid #8c8c8c;
+}
+.full .full_left {
+    float: left;
+    font-size: 0.3rem;
+    text-indent: 0.2rem;
+}
+.full .full_right {
+    float: right;
+    padding-right: 0.2rem;
+}
+.full .full_right .full_right_l {
+    font-size: 0.28rem;
+    color: red;
+    padding-right: 0.05rem;
+}
+.full .full_right .full_right_r {
+    border: 2px solid #e3e3e3;
+    display: inline-block;
+    width: 0.85rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    text-align: center;
+    font-size: 0.28rem;
+}
+.half {
+    width: 100%;
+}
+.half tr td {
+    width: 50%;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    background-color: #fff;
+    border-bottom: 1px solid #8c8c8c;
+}
+.half .half_left {
+    float: left;
+    font-size: 0.3rem;
+    text-indent: 0.2rem;
+}
+.half .half_right {
+    float: right;
+    padding-right: 0.2rem;
+}
+.half .half_right .half_right_l {
+    font-size: 0.28rem;
+    color: red;
+    padding-right: 0.05rem;
+}
+.half .half_right .half_right_r {
+    border: 2px solid #e3e3e3;
+    display: inline-block;
+    width: 0.85rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    text-align: center;
+    font-size: 0.28rem;
+}

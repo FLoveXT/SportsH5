@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>首页</title>
+    <meta name="keywords" content="">
+    <link href="css/iconfont.css" rel="stylesheet">
+    <link href="css/jquery.mCustomScrollbar.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="js/minirefresh/minirefresh.min.css" rel="stylesheet">
+    <link href="layui/css/layui.css" rel="stylesheet">
+    
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="layui/layui.js"></script>
+
+    <script src="js/minirefresh/minirefresh.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/initrem.js"></script>
+
+
+
+    <style>
+        body {
+            background: #fff;
+            overflow: hidden;
+            height: 100%;
+            font-size: 100px;
+        }
+
+        @media (max-device-width : 415px) {
+			.sport {
+			    position: absolute;
+			    left: 0;
+			    right: 0;
+			    height: 100%;
+			    top: 38px;
+			    z-index: 9999;
+			}
+        }
+        @media (min-device-width : 415px) and (max-device-width : 500px) {
+        	.sport {
+			    position: absolute;
+			    left: 0;
+			    right: 0;
+			    height: 100%;
+			    top: 46px;
+			    z-index: 9999;
+			}
+        }
+        
+        @media (min-device-width : 500px) and (max-device-width : 600px) {
+        	.sport {
+			    position: absolute;
+			    left: 0;
+			    right: 0;
+			    height: 100%;
+			    top: 53px;
+			    z-index: 9999;
+			}
+        }
+        
+        @media (min-device-width : 600px) and (max-device-width : 700px) {
+        	.sport {
+			    position: absolute;
+			    left: 0;
+			    right: 0;
+			    height: 100%;
+			    top: 65px;
+			    z-index: 9999;
+			}
+        }
+        
+        @media (min-device-width : 700px) and (max-device-width : 800px) {
+        	.sport {
+			    position: absolute;
+			    left: 0;
+			    right: 0;
+			    height: 100%;
+			    top: 70px;
+			    z-index: 9999;
+			}
+        }
+        
+        @media (min-device-width : 800px) {
+        	.sport {
+			    position: absolute;
+			    left: 0;
+			    right: 0;
+			    height: 100%;
+			    top: 81px;
+			    z-index: 9999;
+			}
+        }
+       
+        @media (max-device-width : 460px) {
+        	.head_right .record_icon {
+	        	border: 0.1rem solid #f49904;
+			    border-radius: 50%;
+			    background-color: #f49904;
+			    color: #fff;
+			    margin-right: 0.15rem;
+			    float: right;
+			    width: 0.3rem;
+			    height: 0.3rem;
+			    line-height: 0.3rem;
+			    text-align: center;
+			    font-size: 0.18rem;
+	        }
+	        
+        }
+
+         @media (min-device-width : 460px) {
+			.head_right .record_icon {
+	        	border: 0.1rem solid #f49904;
+			    border-radius: 50%;
+			    background-color: #f49904;
+			    color: #fff;
+			    margin-right: 0.15rem;
+			    float: right;
+			    width: 0.1rem;
+			    height: 0.1rem;
+			    line-height: 0.1rem;
+			    text-align: center;
+			    font-size: 0.12rem;
+	        }	
+         }
+
+        .minirefresh-totop{
+        	bottom: 15%;
+        }
+        
+        .teamList2 {
+		    background: #fff;
+		    left: 0;
+		    bottom: 0;
+		    position: absolute;
+		    right: 0;
+		    margin-left: 118px;
+		    top: 107px;
+		    bottom: 80px;
+		    padding-top: 6px;
+		    padding: 6px 0px 6px 0px;
+		}
+		.title {
+		    position: static;
+		    background: #323031;
+		    color: #fff;
+		    text-align: center;
+		    font-size: 16px;
+		    height:100%;
+		    border-bottom: none;
+		    z-index: 0;
+		}
+        .title img {
+        	 width: 2.09rem;
+        	 height: 0.82rem;
+        }
+        .head_right {
+			float: right;
+        	height: 30px;
+        	line-height: 30px;
+        }
+        .head_right .describe {
+        	float: left;
+        	margin-right: 0.1rem;
+        	color: #bcbabb;
+    		font-size: 0.24rem;
+        }
+        
+    </style>
+
+    <script>
+
+        $(document).ready(function () {
+
+
+            $("#sideMenu_1 .item").click(function () {
+                $("#sideMenu_1 .item").removeClass("on");
+                $(this).addClass("on");
+            })
+            
+            $("#sideMenu_2 .item").click(function () {
+                $("#sideMenu_2 .item").removeClass("on");
+                $(this).addClass("on");
+            })
+
+
+            $(".sportFilter ul li").click(function () {
+                var index = $(".sportFilter ul li").index(this);
+                $(".sportFilter ul li").removeClass("on");
+                $(this).addClass('on');
+                $(".sideMenu_list").hide();
+                $(".sideMenu_list").eq(index).show();
+                if(index == 0){
+                	$("#teamListComtent").css("margin-left", 0);
+                	$("#teamList").show();
+                	$("#leaguesList").hide();
+                	$("#teamList2").hide();
+                	$("#morningParent").hide();
+                	$("#filter1").show();
+                	$("#teamListParent").show();
+                	$("#filter1").attr("typed", "0");
+                } else if(index == 1){
+                	/* $("#teamListComtent").css("margin-left", 0);
+                	$("#teamList2").show();
+                	$("#leaguesList").hide();
+                	$("#teamList").hide();
+                	$("#filter1").hide();
+                	$("#teamList").hide();
+                	tournamentTemplatePage = 0;
+        			$('#saiguo_list').html('');
+        			tournamentTemplateRefresh('up'); */
+        			
+        			$("#filter1").attr("typed", "1");
+                	$("#teamList").hide();
+                	$("#leaguesList").hide();
+                	$("#teamList2").hide();
+                	$("#filter1").show();
+                	$("#teamListParent").hide();
+                	
+                	$("#morningParent").show();
+                } else if(index == 2){
+                	$("#teamListComtent").css("margin-left", "118px");
+                	$("#teamList2").show();
+                	$("#leaguesList").show();
+                	$("#teamList").hide();
+                	$("#filter1").hide();
+                	$("#teamListParent").hide();
+                	$("#morningParent").hide();
+                	getAllTournamentTemplate();
+                }
+            })
+
+            $(".sportMenu li").click(function(){
+                var index=$(".sportMenu li").index(this);
+                $(".sportMenu li").removeClass("on");
+                $(this).addClass("on");
+                $(".content").hide();
+                $(".content").eq(index).show();
+                
+
+            })
+
+            getMyOrderCount();
+
+
+        })
+
+        function getMyOrderCount(){
+   			$.ajax({
+   				type: "GET",
+   				url: BaseUrl + "order/getMyOrderCount?timestamp=" +  (new Date()).getTime(),
+   				dataType: "json",
+   				cache:false,
+   				success: function(result){
+   					if (result.code == SUCCESS_CODE) {
+   						$("#myOrderCount").html(result.result)
+   					} else {
+   						
+   					}
+   				}
+    			})
+    	}
+
+    </script>
+
+</head>
+
+<body>
+
+    <div class="title">
+        <img src="images/logo.jpg" alt="体育赛事">
+    </div>
+    <div class="sport">
+        <div class="fixed">
+            <div class="top">
+                余额：
+                <span class="num" id="balance">0.00</span>
+                <!-- <span class="addMoney">
+                    <i class="iconfont icon-add" onclick="window.location.href='login/recharge.html'"></i>
+                </span> -->
+                <!-- <div class="pull-right">
+                    <a href="javascript:;">
+                        <i class="iconfont icon-help"></i>
+                    </a>&nbsp;&nbsp;
+                    <a href="login/record.html">
+                        <i class="iconfont icon-qingdan"></i>
+                    </a>
+                </div> -->
+                <div class="head_right">
+                	<a href="login/record.html">
+                		<div class="describe">注单查询</div>
+                		<div class="record_icon" id="myOrderCount">0</div>
+                	</a>
+                </div>
+            </div>
+
+            <div class="Tab">
+                <!--赛事tab-->
+                <ul class="sportMenu">
+                    <li class="on">赛前</li>
+                    <li>滚球</li>
+                    <li>赛果</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 赛前 -->
+       
+        <div class="content" style="display:block">
+                <div class="sportFilter">
+                    <ul>
+                        <li class="on">今日</li>
+                        <li>早盘</li>
+                        <li>按联赛</li>
+                    </ul>
+                    <a id="filter1" class="teamFiter pull-right" typed="0">
+                        <i class="iconfont icon-filter"></i>
+                    </a>
+                </div>
+                <div class="sideMenu" id="sideMenu">
+                    <!--按时间-->
+                    <div class="sideMenu_list" id="sideMenu_1" style="display:block">
+                    </div>
+                    <!--按联赛-->
+                    <div id="leaguesList" class="sideMenu_list" id="sideMenu_2" style="display:none">
+                        <div class="item on">
+                            <img src="images/team_icon.png" width="20">亚洲杯
+                            <span class="gameNum">(9)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="teamList" id="teamListComtent" style="margin-left: 0;">
+                	<div id="teamListParent" class="minirefresh-wrap">
+					    <div class="minirefresh-scroll" > 
+					    	 <div id="teamList" > </div>
+					    </div>
+					</div>
+                </div>
+                
+                 <div id="morningParent" class="minirefresh-wrap teamList2" style="margin-left: 0;display: none;">
+				    <div class="minirefresh-scroll" > 
+				    	 <div id="morningDataList" ></div>
+				    </div>
+				</div>
+                <div class="teamList teamList2" id="teamList2" style="display: none;">
+                </div>
+                
+               
+
+            </div>
+        
+        <!-- 滚球 -->
+        <div class="content" style="display:none">
+            <div class="sportFilter">
+                <a id="filter2" href="#"  class="teamFiter pull-right" style="display: inline-block;width: 95%;text-align: right;">
+                	<span style="display: inline-block;margin-right: 41%;"><i id="time">30</i>s</span>
+                    <i class="iconfont icon-filter"></i>
+                </a>
+            </div>
+            
+            <div class="gameListBox" id="gunqiu_list">
+            	<div id="grounderLeague" class="minirefresh-wrap">
+				    <div class="minirefresh-scroll" > 
+				    	 <div id="guanQiuList"></div>
+				    </div>
+				</div>
+            
+            </div>
+
+        </div>
+
+         <!-- 赛果 -->
+        <div class="content" style="display:none">
+            <div class="sportFilter">
+                <div align="center">
+
+                    
+                    <div class="filterDate">
+                        <i id="back_date" class="iconfont icon-pre_arrow"></i>
+                        <input id="selDate" first="true" type="text" readonly="readonly">
+                        <i id="next_date" class="iconfont icon-next_arrow"></i>
+                    </div>
+
+                    <a href="#" id="teamFiter" class="teamFiter pull-right" style="top:-20px;">
+                        <i class="iconfont icon-filter"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="gameListBox" >
+            <div id="gameResult" class="minirefresh-wrap">
+			    <div class="minirefresh-scroll" > 
+			    	 <div id="saiguo_list"></div>
+			    </div>
+			</div>
+			</div>
+        </div>
+    
+        
+    </div>
+
+
+    <!--下单弹出层-->
+    <div class="xiadangLayer">
+        <h1 align="right"><a href="javascript:;" onclick="xiadang.closeLayer()" class="close_btn"><i class="iconfont icon-close"></i></a></h1>
+
+        <div class="tz_info">
+                <div>
+                        <p class="pt10"><span class="red">低于1.0</span></p>
+                        <p class="pt8">全场大小</p>
+                        <p class="pt8">菲律宾<i class="iconfont icon-vs">塔吉克</i></p>
+                        <span class="red font30 pull-right" style="position:relative;top:-55px;">@19.68</span>
+                </div>
+        </div>
+
+        <div class="btn_area">
+            <input name="" placeholder="请输入金额" type="text"/><a href="#" class="touzhu_btn pull-right">确认投注</a>
+        </div>
+    </div>
+
+
+    <div class="bottom">
+        <ul>
+            <li class="on" onclick="window.location.href='sport.html'">
+                <i class="iconfont icon-football_icon"></i>
+                <p>体育</p>
+            </li>
+            <!-- <li onclick="window.location.href='hall.html'">
+                <i class="iconfont icon-dating"></i>
+                <p>大厅</p>
+            </li> -->
+
+            <li onclick="window.location.href='my.html'">
+                <i class="iconfont icon-wode"></i>
+                <p>我的</p>
+            </li>
+        </ul>
+    </div>
+    <script src="js/swiper.min.js"></script>
+
+
+<script>
+var xiadang={
+		popLayer:function(obj){
+			$(".Odds").parent().removeClass("on");
+			$(obj).parent().addClass("on");
+			$(".xiadangLayer").show().animate({bottom:"0"});
+		},
+		closeLayer:function(){
+			$(".xiadangLayer").hide().animate({bottom:"-150px"});
+		}
+}
+      
+function getUserInfo(){
+	$.ajax({
+		type : "GET",
+		url : BaseUrl + "user/getUserInfo?timestamp=" +  (new Date()).getTime(),
+		dataType : "json",
+		success : function(result) {
+			if (result.code == SUCCESS_CODE) {
+				var user = result.result.user;
+				$("#balance").html(formatterDouble(user.balance));
+			} else if(result.code == UNLOGIN){
+			} else {
+				alert(result.msg);
+			}
+		}
+	});
+}
+
+//滚动条插件
+$(document).ready(function () {
+	//findDateList();
+
+	getUserInfo();
+	$("#sideMenu").mCustomScrollbar({
+		axis: "y",
+		advanced: {
+			autoExpandHorizontalScroll: true
+		}
+	});
+
+	$("#teamList").mCustomScrollbar({
+		axis: "y",
+		advanced: {
+			autoExpandHorizontalScroll: true
+		}
+	});
+	$("#teamList2").mCustomScrollbar({
+		axis: "y",
+		advanced: {
+			autoExpandHorizontalScroll: true
+		}
+	});
+
+	$("#guanQiuList").mCustomScrollbar({
+		axis: "y",
+		advanced: {
+			autoExpandHorizontalScroll: true
+		}
+	});
+
+	$("#saiguo_list").mCustomScrollbar({
+		axis: "y",
+		advanced: {
+			autoExpandHorizontalScroll: true
+		}
+	});
+
+
+	$("#back_date").click(function(){
+		var date = $("#selDate").val();
+		$("#selDate").attr("first", false);
+		if(!date){
+			$("#selDate").val(addDate(new Date(), 0));
+			gameResultPage = 0;
+			$('#saiguo_list').html('');
+			getGameResult('up');
+		} else{
+			$("#selDate").val(addDate(date, -1));
+			gameResultPage = 0;
+			$('#saiguo_list').html('');
+			getGameResult('up');
+		}
+	});
+
+	$("#next_date").click(function(){
+		$("#selDate").attr("first", false);
+		var date = $("#selDate").val();
+		if(!date){
+			$("#selDate").val(addDate(new Date(), 0));
+			gameResultPage = 0;
+			$('#saiguo_list').html('');
+			getGameResult('up');
+		} else{
+			$("#selDate").val(addDate(date, 1));
+			gameResultPage = 0;
+			$('#saiguo_list').html('');
+			getGameResult('up');
+		}
+	});
+});
+
+layui.use('laydate', function(){
+	var laydate = layui.laydate;
+
+	//执行一个laydate实例
+	laydate.render({
+		elem: '#selDate', //指定元素
+		value: new Date(),
+		done: function(value, date, endDate){
+			$("#selDate").attr("first", false);
+			gameResultPage = 0;
+			$('#saiguo_list').html('');
+			getGameResult('up');
+		}
+	});
+});
+layui.use('layer', function(){
+	$("#teamFiter").click(function(){
+		layer.open({
+			area: ['100%', '100%'],
+			title: false,
+			closeBtn: 0,
+			type: 2, 
+			content: 'filterGame.html' //这里content是一个普通的String
+		});
+	});
+
+	$("#filter1").click(function(){
+        var typed = $('#filter1').attr('typed');
+        if(typed == '0'){
+            layer.open({
+                area: ['100%', '100%'],
+                title: false,
+                closeBtn: 0,
+                type: 2, 
+                content: 'filterGame2.html' //这里content是一个普通的String
+            });
+        }
+        else{
+            layer.open({
+                area: ['100%', '100%'],
+                title: false,
+                closeBtn: 0,
+                type: 2, 
+                content: 'filterGame1.html', //这里content是一个普通的String
+            });
+        }
+		
+	});
+	$("#filter2").click(function(){
+		layer.open({
+			area: ['100%', '100%'],
+			title: false,
+			closeBtn: 0,
+			type: 2, 
+			content: 'filterGame3.html' //这里content是一个普通的String
+		});
+	});
+});
+
+        
+        
+var gameResultRefresh = new MiniRefresh({
+	container: '#gameResult',
+	down: {
+		isLock: false,//是否禁用下拉刷新
+		offset: 5,
+		callback: function () {
+			getGameResult('down');
+		}
+	},
+	up: {
+		isAuto: true,
+		callback: function () {
+			getGameResult('up');
+		}
+	}
+});
+        
+var ROWS = 10;
+var gameResultPage = 0;
+var leagueId = "";
+var getGameResult = function (downOrUp) {
+    if (downOrUp == 'down') {
+    	gameResultPage = 1;// 下拉刷新页码设置
+    } else {
+    	gameResultPage++;// 上拉加载递增页码
+    }
+
+    var sdate = $("#selDate").val();
+    if($("#selDate").attr("first") == "true" && !sdate){
+    	sdate = addDate(new Date(), 0);
+    }
+    $.ajax({
+    	url: BaseUrl + "api/findResultGame?timestamp=" +  (new Date()).getTime(),
+        type: "POST",
+        data: {// 请求参数，一般会带上页码
+        	leagueId: leagueId,
+			startTime: sdate,
+			page: gameResultPage,
+            rows: ROWS,
+        },
+        dataType : "json",
+        success: function (result) {
+            // 下面这段请根据自己的数据结构来处理
+			if (result.code == SUCCESS_CODE) {
+				var data =  result.result;
+				var totalSize = data.count;
+				if (data.eventForms && data.eventForms.length > 0) {
+					var html = "";
+					$.each(data.eventForms, function(i, val){
+						html += '<div class="item_bg">';
+						html += '<table width="100%" border="0" class="saiguo">';
+						html += '<tr>';
+						html += '<td class="R"><div class="smallR color2">' + val.leagueCnName + '</div></td>';
+						html += '<td width="50" class="C smallC gray">('+ val.homeScore + '-' + val.awayScore + ')</td>';
+						html += '<td><div class="smallL orange">完场</div></td>';
+						html += '</tr>';
+						html += '<tr><td colspan="3" style="text-align: center;"><span class="date font12 gray">' + val.startDate + '</span></td></tr>';
+						html += '<tr>';
+						html += '<td class="R" width="44%"><span class="font16 bold">' + val.homeTeamCnName + '</span></td>';
+						html += '<td class="C font16 bold red">' + val.wholeHomeScore + '-' + val.wholeAwayScore + '</td>';
+						html += '<td width="44%"><span class="font16 bold">' + val.awayTeamCnName + '</span></td>';
+						html += '</tr>';
+						html += '</table>';
+						html += '</div>';
+					})
+					
+					if (downOrUp == 'down') {
+						$('#saiguo_list').html('');
+                        $('#saiguo_list').append(html);// DOM 插入数据
+                        gameResultRefresh.endDownLoading(true);// 结束下拉刷新
+                    } else {
+						$("#saiguo_list").append(html);
+                        if ((totalSize/ROWS) <= gameResultPage) {// 是否已取完数据页
+                            gameResultRefresh.endUpLoading(true);// 结束上拉加载
+                        } else {
+                            gameResultRefresh.endUpLoading(false);
+                            gameResultRefresh.endDownLoading(false);// 结束下拉刷新
+                        }
+                    }
+                } else {
+                    if (downOrUp == 'down') {
+                        $('#saiguo_list').html('');
+                        gameResultRefresh.endDownLoading(true);
+                    } else {
+                        gameResultRefresh.endUpLoading(true);
+                    }
+                }
+			} else {
+				alert(result.msg)
+			}
+        },
+        error: function () {
+            if (downOrUp == 'down') {
+                $('#saiguo_list').html('');
+                gameResultRefresh.endDownLoading(true);
+            } else {
+                gameResultRefresh.endUpLoading(true);
+            }
+        }
+    });
+};
+        
+
+function addDate(date,days){ 
+	var d=new Date(date); 
+	d.setDate(d.getDate()+days); 
+	var m=d.getMonth()+1; 
+	var dateStr = d.getFullYear() + '-';
+	if(m < 10)
+		dateStr += "0";
+	dateStr += m + '-';
+	if(d.getDate() < 10)
+		dateStr += "0";
+	dateStr += d.getDate();
+	return dateStr; 
+}
+
+//得到时间对应的赛程
+var tournamentTemplateRefresh = new MiniRefresh({
+	container: '#teamListParent',
+	down: {
+		isLock: false,//是否禁用下拉刷新
+		offset: 5,
+		callback: function () {
+			tournamentTemplateResult('down');
+		}
+	},
+	up: {
+		isAuto: true,
+		callback: function () {
+			tournamentTemplateResult('up');
+		}
+	}
+});
+
+
+var leagueId2 = "";
+/* function findDateList(){
+	$.ajax({
+		type: "POST",
+		url: BaseUrl + "api/findDateList",
+		dataType: "json",
+		cach: false,
+		success: function(result){
+			if(result.code == "00"){
+				var html = "";
+				$.each(result.result, function(i, val){
+					html += '<div class="item';
+					if(i==0){
+						html += " on";
+						//getTournamentTemplate2(val.startTime);
+					}
+					html += '" date="' + val.startTime + '">';
+					html += val.name + '（' + val.count + '）';
+					html += '<p>' + val.startTime.substring(0, 10) + '</p>';
+					html += '</div>';
+				})
+				$("#sideMenu_1").html(html);
+				$("#sideMenu_1>.item").click(function(){
+					$("#sideMenu_1>.item").removeClass("on");
+					$(this).addClass("on");
+					//getTournamentTemplate2($(this).attr("date"));
+					$("#teamList").html("");
+					tournamentTemplatePage = 0;
+					tournamentTemplateResult('up');
+				})
+				
+				
+				tournamentTemplatePage = 0;
+				tournamentTemplateRefresh = new MiniRefresh({
+					container: '#teamListParent',
+					down: {
+						isLock: false,//是否禁用下拉刷新
+						offset: 5,
+						callback: function () {
+							tournamentTemplateResult('down');
+						}
+					},
+					up: {
+						isAuto: true,
+						callback: function () {
+							tournamentTemplateResult('up');
+						}
+					}
+				});
+			}else {
+				alert(result.msg);
+			}
+		}
+	});
+} */
+            
+//按日期获取比赛信息
+var tournamentTemplatePage = 0;
+var leagueId = "";
+var tournamentTemplateResult = function (downOrUp) {
+      if (downOrUp == 'down') {
+      	tournamentTemplatePage = 1;// 下拉刷新页码设置
+      } else {
+      	tournamentTemplatePage++;// 上拉加载递增页码
+      }
+
+      var date = $("#sideMenu_1>.on").attr("date");
+      var reqData = {
+    		tournamentTemplateFk: leagueId2,
+  			//startTime: date,
+            languageTypeFk: 57,
+  			page: tournamentTemplatePage,
+  			rows: 10,
+  			type: 0,
+  		};
+      $.ajax({
+    	  url: BaseUrl + "api/findTournamentTemplate?timestamp=" +  (new Date()).getTime(),
+          type: "POST",
+          data: reqData,
+          dataType : "json",
+          success: function (result) {
+			if (result.code == SUCCESS_CODE) {
+				var data =  result.result;
+				var totalSize = data.count;
+				var listMap = data.listMap;
+				if(listMap){
+					var html = "";
+					$.each(listMap, function(i, val){
+						var liansaiName = val.name;
+						var liansaiId = val.id;
+						
+						var eventList = val.event;
+						if(eventList){
+							$.each(eventList, function(n, event){
+								var hostTeamName = event.homeTeamCnName;
+								var hostTeamId = event.homeAgoTeam;
+								var guestTeamName = event.awayTeamCnName;
+								var guestTeamId = event.awayAgoTeam;
+								var startdate = event.startDate;
+								var eventId = event.eventId;
+								 html += '<ul class="item detail"  eventId="' + eventId + '">';
+        						 html += '<p class="date" style="text-align:center;">' + liansaiName + '</p>';
+        						 html += '<p class="date" style="text-align:center;">' + startdate + '</p>';
+        						 html += '<li>';
+        						/*  html += '<img src="" width="30">'; */
+        						 html += '<p>' + hostTeamName + '</p>';
+        						 html += '</li>';
+        						 html += '<li style="margin-top:-5px;"><i class="iconfont icon-vs"></i></li>';
+        						 html += '<li>';
+        						 /* html += '<img src="" width="30">'; */
+        						 html += '<p>' + guestTeamName + '</p>';
+        						 html += '</li>';
+        						 html += '</ul>';
+							})
+						}
+					})
+					
+					if (downOrUp == 'down') {
+						$("#teamList").html("");
+						$(".teamList").mCustomScrollbar("destroy");
+						$("#teamList").append(html);
+						
+						$(".teamList").mCustomScrollbar();
+						$(".detail").click(function(){
+							window.location.href = BaseUrl + "h5/detail.html?type=1&eventId=" + $(this).attr("eventId");
+						});
+						
+						$($("#teamListParent").parent()).css("position", "initial");
+                        tournamentTemplateRefresh.endDownLoading(true);// 结束下拉刷新
+                      } else {
+                    	 $("#teamList").append("");
+  						$(".teamList").mCustomScrollbar("destroy");
+  						$("#teamList").html(html);
+  						
+  						$(".teamList").mCustomScrollbar();
+  						$(".detail").click(function(){
+  							window.location.href = BaseUrl + "h5/detail.html?type=1&eventId=" + $(this).attr("eventId");
+  						});
+  						
+  						$($("#teamListParent").parent()).css("position", "initial");
+                          if ((totalSize/ROWS) <= tournamentTemplatePage) {// 是否已取完数据页
+                              tournamentTemplateRefresh.endUpLoading(true);// 结束上拉加载
+                          } else {
+                              tournamentTemplateRefresh.endUpLoading(false);
+                              tournamentTemplateRefresh.endDownLoading(false);// 结束下拉刷新
+                          }
+                      }
+				}else {
+	                      if (downOrUp == 'down') {
+	                          $('#guanQiuList').html('');
+	                          tournamentTemplateRefresh.endDownLoading(true);
+	                      } else {
+	                          tournamentTemplateRefresh.endUpLoading(true);
+	                      }
+	                  }
+			} else {
+				alert(result.msg)
+			}
+          },
+          error: function () {
+              if (downOrUp == 'down') {
+                  $('#guanQiuList').html('');
+                  tournamentTemplateRefresh.endDownLoading(true);
+              } else {
+                  tournamentTemplateRefresh.endUpLoading(true);
+              }
+          }
+      });
+  };
+  
+  
+//获取早盘数据
+var morningTemplateRefresh = new MiniRefresh({
+	container: '#morningParent',
+	down: {
+		isLock: false,//是否禁用下拉刷新
+		offset: 5,
+		callback: function () {
+			morningDataResult('down');
+		}
+	},
+	up: {
+		isAuto: true,
+		callback: function () {
+			morningDataResult('up');
+		}
+	}
+});
+
+var morningPage = 0;
+var morningLeagueId = "";
+var morningDataResult = function (downOrUp) {
+      if (downOrUp == 'down') {
+    	  morningPage = 1;// 下拉刷新页码设置
+      } else {
+    	  morningPage++;// 上拉加载递增页码
+      }
+
+      var reqData = {
+    		tournamentTemplateFk: morningLeagueId,
+  			page: morningPage,
+  			rows: 10,
+  			type: 1,
+  		};
+      $.ajax({
+    	  url: BaseUrl + "api/findTournamentTemplate?timestamp=" +  (new Date()).getTime(),
+          type: "POST",
+          data: reqData,
+          dataType : "json",
+          success: function (result) {
+			if (result.code == SUCCESS_CODE) {
+				var data =  result.result;
+				var totalSize = data.count;
+				var listMap = data.listMap;
+				if(listMap){
+					var html = "";
+					$.each(listMap, function(i, val){
+						var liansaiName = val.name;
+						var liansaiId = val.id;
+						
+						var eventList = val.event;
+						if(eventList){
+							$.each(eventList, function(n, event){
+								var hostTeamName = event.homeTeamCnName;
+								var hostTeamId = event.homeAgoTeam;
+								var guestTeamName = event.awayTeamCnName;
+								var guestTeamId = event.awayAgoTeam;
+								var startdate = event.startDate;
+								var eventId = event.eventId;
+								 html += '<ul class="item detail"  eventId="' + eventId + '">';
+        						 html += '<p class="date" style="text-align:center;">' + liansaiName + '</p>';
+        						 html += '<p class="date" style="text-align:center;">' + startdate + '</p>';
+        						 html += '<li>';
+        						/*  html += '<img src="" width="30">'; */
+        						 html += '<p>' + hostTeamName + '</p>';
+        						 html += '</li>';
+        						 html += '<li style="margin-top:-5px;"><i class="iconfont icon-vs"></i></li>';
+        						 html += '<li>';
+        						 /* html += '<img src="" width="30">'; */
+        						 html += '<p>' + guestTeamName + '</p>';
+        						 html += '</li>';
+        						 html += '</ul>';
+							})
+						}
+					})
+					
+					if (downOrUp == 'down') {
+						$("#morningDataList").html(html);
+						
+                        morningTemplateRefresh.endDownLoading(true);// 结束下拉刷新
+                      } else {
+  						  $("#morningDataList").append(html);
+                          if ((totalSize/ROWS) <= morningPage) {// 是否已取完数据页
+	  						  $("#morningDataList").append('');
+	  						  $("#morningDataList").html(html);
+	                          if ((totalSize/ROWS) <= morningPage) {// 是否已取完数据页
+	                              morningTemplateRefresh.endUpLoading(true);// 结束上拉加载
+	                          } else {
+	                              morningTemplateRefresh.endUpLoading(false);
+	                          }
+                          }
+                      }
+					
+					$(".detail").click(function(){
+						window.location.href = BaseUrl + "h5/detail.html?type=1&eventId=" + $(this).attr("eventId");
+					});
+				}else {
+	                      if (downOrUp == 'down') {
+	                          $('#morningParent').html('');
+	                          morningTemplateRefresh.endDownLoading(true);
+	                      } else {
+	                          morningTemplateRefresh.endUpLoading(true);
+	                      }
+	                  }
+			} else {
+				alert(result.msg)
+			}
+          },
+          error: function () {
+              if (downOrUp == 'down') {
+                  $('#guanQiuList').html('');
+                  morningTemplateRefresh.endDownLoading(true);
+              } else {
+                  morningTemplateRefresh.endUpLoading(true);
+              }
+          }
+      });
+  };
+
+
+
+            
+/**
+ * 获取联赛
+ * @returns
+ */
+function getAllTournamentTemplate(){
+	var reqData = {
+			type: 3,
+	};
+	$.ajax({
+		type: "GET",
+		url: BaseUrl + "api/findAllTournamentTemplate?timestamp=" +  (new Date()).getTime(),
+		data: reqData,
+		dataType: "json",
+		cach: false,
+		success: function(result){
+			if(result.code == "00"){
+				var data = result.result;
+				if(data){
+					var html = "";
+					for(var i = 0; i < data.length; i++){
+						var val = data[i];
+						 html += '<div class="item';
+						 if(i == 0){
+							 html += " on";
+							 getGameInfo(val.leagueId);
+						 }
+						 html += '" leagueId="'+val.leagueId+'">';
+						 /* html += '<img src="images/team_icon.png" width="20">'; */
+						 html += val.leagueCnName ;
+						 html += '<span class="gameNum">(' + val.count + ')</span>';
+						 html += '</div>';
+					}
+					$("#leaguesList").html(html);
+					$("#leaguesList>.item").click(function(){
+						$("#leaguesList>.item").removeClass("on");
+						$(this).addClass("on");
+						getGameInfo($(this).attr("leagueId"));
+					});
+				}
+			} else if(result.code == UNLOGIN){
+				layer.alert(result.msg);
+				unLogin();
+			} else {
+				alert(result.msg);
+			}
+		}
+	});
+}
+
+function getGameInfo(leagues){
+	var reqData = {
+			tournamentTemplateFk: leagues,
+			page: 1,
+			rows: 10,
+			type: 3,
+	};
+	$.ajax({
+		type: "POST",
+		url: BaseUrl + "api/findTournamentTemplate?timestamp=" +  (new Date()).getTime(),
+		data: reqData,
+		dataType: "json",
+		cach: false,
+		success: function(result){
+			if(result.code == "00"){
+				var data = result.result;
+				if(data){
+					var listMap = data.listMap;
+					var html = "";
+					if(listMap){
+						$.each(listMap, function(i, val){
+							var liansaiName = val.name;
+							var liansaiId = val.id;
+							var eventList = val.event;
+							if(eventList){
+								$.each(eventList, function(n, event){
+									var hostTeamName = event.homeTeamCnName;
+									var hostTeamId = event.homeAgoTeam;
+									var guestTeamName = event.awayTeamCnName;
+									var guestTeamId = event.awayAgoTeam;
+									var startdate = event.startDate;
+									var eventId = event.eventId;
+									 html += '<ul class="item detail" eventId="' + eventId + '">';
+            						 html += '<p class="date">' + startdate + '</p>';
+            						 html += '<li>';
+            						 /* html += '<img src="" width="30">'; */
+            						 html += '<p>' + hostTeamName + '</p>';
+            						 html += '</li>';
+            						 html += '<li><i class="iconfont icon-vs"></i></li>';
+            						 html += '<li>';
+            						/*  html += '<img src="" width="30">'; */
+            						 html += '<p>' + guestTeamName + '</p>';
+            						 html += '</li>';
+            						 html += '</ul>';
+								})
+							}
+    					});
+						
+					}
+					$(".teamList2").mCustomScrollbar("destroy");
+					$("#teamList2").html(html);
+					
+					$(".teamList2").mCustomScrollbar();
+					$(".detail").click(function(){
+						window.location.href = BaseUrl + "h5/detail.html?type=1&eventId=" + $(this).attr("eventId");
+					});
+				}
+			} else if(result.code == UNLOGIN){
+				layer.alert(result.msg);
+				unLogin();
+			} else {
+				alert(result.msg);
+			}
+		}
+	});
+}
+
+
+var grounderLeagueRefresh = new MiniRefresh({
+	container: '#grounderLeague',
+	down: {
+		isLock: false,//是否禁用下拉刷新
+		offset: 5,
+		callback: function () {
+			grounderLeagueResult('down');
+		}
+	},
+	up: {
+		isAuto: true,
+		callback: function () {
+			grounderLeagueResult('up');
+		}
+	}
+});
+
+var grounderLeaguePage = 0;
+var leagueId = "";
+var leagueId3 ="";
+var grounderLeagueResult = function (downOrUp) {
+		clearTimeout(timer);
+		countdown=30;
+		settime();
+        if (downOrUp == 'down') {
+        	$("#guanQiuList").html("");
+        	grounderLeaguePage = 1;// 下拉刷新页码设置
+        } else {
+        	grounderLeaguePage++;// 上拉加载递增页码
+        }
+
+        $.ajax({
+        	url: BaseUrl + "api/findGrounderLeagueList?timestamp=" +  (new Date()).getTime(),
+            type: "POST",
+            data: {// 请求参数，一般会带上页码
+            	tournamentTemplateFk: leagueId3,
+    			page: grounderLeaguePage,
+                rows: ROWS,
+            },
+            dataType : "json",
+            success: function (result) {
+                // 下面这段请根据自己的数据结构来处理
+				if (result.code == SUCCESS_CODE) {
+					var data =  result.result;
+					var totalSize = data.count;
+					var listMap = data.listMap;
+					if(listMap){
+						var html = "";
+						$.each(listMap, function(i, val){
+							var liansaiName = val.name;
+							var liansaiId = val.id;
+							
+							var eventList = val.event;
+							if(eventList){
+								$.each(eventList, function(n, event){
+									var hostTeamName = event.homeTeamCnName;
+									var hostTeamId = event.homeAgoTeam;
+									var homeScore = event.wholeHomeScore;
+									var guestTeamName = event.awayTeamCnName;
+									var guestTeamId = event.awayAgoTeam;
+									var awayScore = event.wholeAwayScore;
+									var startdate = event.startDate;
+									var eventId = event.eventId;
+									var eventAgoId = event.eventAgoId;
+									
+									var time = event.time;
+									
+									html += '<div class="guanQiuList">';
+    								html += '<div>';
+    								html += '<table width="100%">';
+    								html += '<tr class="table_head">';
+    								html += '<td class="gameName">' + liansaiName + '<span>' + time + '</span></td>';
+    								html += '<td></td>';
+    								//html += '<td></td>';
+    								//html += '<td>当前让球</td>';
+    								//html += '<td>全场大小</td>';
+    								html += ' </tr>';
+    								html += '<tr>';
+    								html += '<td class="gunqiu_list" eventId="' + eventId + '" style="width: 80%;"><span class="teamName">' + hostTeamName + '</span></td>';
+    								html += '<td class="gunqiu_list" eventId="' + eventId + '" style="text-align:right; padding-right: 30px;"><span class="green">' + homeScore + '</span></td>';
+    								//html += '<td rowspan="2" class="RBorder BBorder gunqiu_list"><i class="iconfont icon-right_arrow"></i></td>';
+    								//html += '<td class="BBorder RBorder">0.0<span class="Odds" onclick="xiadang.popLayer(this)">1.66</span></td>';
+    								//html += '<td class="BBorder RBorder">大1.5<span class="Odds" onclick="xiadang.popLayer(this)">2.42</span></td>';
+    								html += '</tr>';
+    								html += '<tr>';
+    								html += '<td class="BBorder gunqiu_list" eventId="' + eventId + '"><span class="teamName">' + guestTeamName + '</span></td>';
+    								html += '<td class="BBorder gunqiu_list" eventId="' + eventId + '" style="text-align:right; padding-right: 30px;"><span class="green">' + awayScore + '</span></td>';
+    								//html += '<td  class="BBorder RBorder">0.0<span class="Odds" onclick="xiadang.popLayer(this)">1.66</span></td>';
+    								//html += '<td class="BBorder">小1.5<span class="Odds" onclick="xiadang.popLayer(this)">2.42</span></td>';
+    								html += '</tr>';
+    								html += '</table>';
+    								html += '</div>';
+    								html += '</div>';
+								})
+							}
+						})
+						if (downOrUp == 'down') {
+							$("#guanQiuList").html("");
+							$("#guanQiuList").append(html);
+                            grounderLeagueRefresh.endDownLoading(true);// 结束下拉刷新
+                        } else {
+                        	$("#guanQiuList").append(html);
+                            if ((totalSize/ROWS) <= grounderLeaguePage) {// 是否已取完数据页
+                                grounderLeagueRefresh.endUpLoading(true);// 结束上拉加载
+                            } else {
+                                grounderLeagueRefresh.endUpLoading(false);
+                                grounderLeagueRefresh.endDownLoading(false);// 结束下拉刷新
+                            }
+                        }
+						
+						$(".gunqiu_list").click(function(){
+							window.location.href = BaseUrl + "h5/detail.html?type=2&eventId=" + $(this).attr("eventId");
+						});
+					}else {
+                        if (downOrUp == 'down') {
+                            $('#guanQiuList').html('');
+                            grounderLeagueRefresh.endDownLoading(true);
+                        } else {
+                            grounderLeagueRefresh.endUpLoading(true);
+                        }
+                    }
+				} else {
+					alert(result.msg)
+				}
+            },
+            error: function () {
+                if (downOrUp == 'down') {
+                    $('#guanQiuList').html('');
+                    grounderLeagueRefresh.endDownLoading(true);
+                } else {
+                    grounderLeagueRefresh.endUpLoading(true);
+                }
+            }
+        });
+    };
+
+
+    var countdown=30;
+    var timer;
+    function settime() {  
+        if (countdown == 0) { 
+            countdown = 30;  
+            grounderLeagueRefresh.triggerDownLoading();
+        } else { 
+        	countdown--; 
+            $("#time").html(countdown);
+    		timer = setTimeout(function() {  
+                settime();
+            },1000)  
+        }  
+
+    } 
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>首页</title>
+    <meta name="keywords" content="">
+    <link href="css/iconfont.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/swiper.min.css" rel="stylesheet">
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+        .contaier {
+            padding: 10px 8px;
+            background: #fff;
+        }
+        .swiper-container {
+           
+            width: 100%;
+            padding:0; margin: 0
+        }
+        .swiper-slide {
+            background: #efefef;
+        }
+        .swiper-slide img {
+            width: 100%
+        }
+        
+    </style>
+
+    <script>
+        $(document).ready(function(){
+           
+        })
+    </script>
+
+</head>
+
+<body>
+    <!-- Swiper begin -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="images/banner1.jpg">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/banner2.jpg">
+            </div>
+        </div>
+        <!-- Add Pagination -->
+       
+    </div>
+    <!-- Swiper end-->
+
+    <div class="contaier" style="position:relative;top:-2px;z-index:9999999">
+      <div class="bankuai">
+            <ul>
+                <li><img src="images/bankuaiA.png"><p>体育赛事</p></li>
+                <li><img src="images/bankuaiB.png"><p>敬请期待</p></li>
+                <li><img src="images/bankuaiC.png"><p>敬请期待</p></li>
+            </ul>
+      </div>
+    </div>
+                    
+    <div class="hotTuijian">
+
+        <h1><i class="iconfont icon-huo"></i> 热门推荐<a href="javascript:;" class="more pull-right"><i class="iconfont icon-more"></i></a></h1>
+
+            <div class="item">
+                <ul>
+                    <li class="left">英超</li><li class="time">03-24 03:25</li><li></li>
+                </ul>
+                <ul class="pt6 clear_it">
+                    <li>
+                        <img src="images/team_1.png">
+                        <p class="teamName">比利时利利</p>
+                    </li>
+                    <li><i class="iconfont icon-vs"></i></li>
+                    <li>
+                        <img src="images/team_2.png">
+                        <p class="teamName">比利时21</p>
+                    </li>
+                </ul>
+            </div>
+
+
+            
+            <div class="item">
+                    <ul>
+                        <li class="left">英超</li><li class="time">03-24 03:25</li><li></li>
+                    </ul>
+                    <ul class="pt6 clear_it">
+                        <li>
+                            <img src="images/team_1.png">
+                            <p class="teamName">比利时利利</p>
+                        </li>
+                        <li><i class="iconfont icon-vs"></i></li>
+                        <li>
+                            <img src="images/team_2.png">
+                            <p class="teamName">比利时21</p>
+                        </li>
+                    </ul>
+            </div>
+
+            
+            <div class="item">
+                    <ul>
+                        <li class="left">英超</li><li class="time">03-24 03:25</li><li></li>
+                    </ul>
+                    <ul class="pt6 clear_it">
+                        <li>
+                            <img src="images/team_1.png">
+                            <p class="teamName">比利时利利</p>
+                        </li>
+                        <li><i class="iconfont icon-vs"></i></li>
+                        <li>
+                            <img src="images/team_2.png">
+                            <p class="teamName">比利时21</p>
+                        </li>
+                    </ul>
+            </div>
+
+
+            <div style="height:50px;"></div>
+    
+    </div>      
+
+    <div class="bottom">
+            <ul>
+                <li onclick="window.location.href='sport.html'">
+                    <i class="iconfont icon-football_icon"></i>
+                    <p>体育</p>
+                </li>
+               <!--  <li  class="on" onclick="window.location.href='hall.html'">
+                    <i class="iconfont icon-dating"></i>
+                    <p>大厅</p>
+                </li> -->
+               
+                <li onclick="window.location.href='my.html'"> 
+                    <i class="iconfont icon-wode"></i>
+                    <p>我的</p>
+                </li>
+            </ul>
+    </div>
+
+    <script src="js/swiper.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            pagination: {
+                el: '.swiper-pagination',
+            },
+        });
+    </script>
+
+</body>
+
+</html>
